@@ -1,0 +1,15 @@
+{
+  "name": "usfxr",
+  "version": "0.0.1",
+  "displayName": "usfxr",
+  "description": "quick prototype sound effects",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "keywords": [
+    "audio"
+  ],
+  "author": {
+    "name": "grapefrukt",
+    "url": "https://github.com/grapefrukt/usfxr"
+  }
+}
