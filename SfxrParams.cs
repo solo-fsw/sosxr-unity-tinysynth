@@ -9,92 +9,92 @@ namespace usfxr {
 	
 	[Serializable]
 	public struct SfxrParams {
-		// Shape of wave to generate
+		/// Shape of wave to generate 
 		[SerializeField] public WaveType waveType; 
 
-		// Overall volume of the sound (0 to 1)
+		/// Overall volume of the sound (0 to 1)
 		[Range(0, 1)] public float masterVolume;
 
-		// Length of the volume envelope attack (0 to 1)
+		/// Length of the volume envelope attack (0 to 1)
 		[Range(0, 1)] public float attackTime;
-		// Length of the volume envelope sustain (0 to 1)
+		/// Length of the volume envelope sustain (0 to 1)
 		[Range(0, 1)] public float sustainTime;
-		// Tilts the sustain envelope for more 'pop' (0 to 1)
+		/// Tilts the sustain envelope for more 'pop' (0 to 1)
 		[Range(0, 1)] public float sustainPunch;
-		// Length of the volume envelope decay (yes, I know it's called release) (0 to 1)
+		/// Length of the volume envelope decay (yes, I know it's called release) (0 to 1)
 		[Range(0, 1)] public float decayTime;
 
-		// Base note of the sound (0 to 1)
+		/// Base note of the sound (0 to 1)
 		[Range(0, 1)] public float startFrequency;
 
-		// If sliding, the sound will stop at this frequency, to prevent really low notes (0 to 1)
+		/// If sliding, the sound will stop at this frequency, to prevent really low notes (0 to 1)
 		[Range(0, 1)] public float minFrequency;
 
-		// Slides the note up or down (-1 to 1)
+		/// Slides the note up or down (-1 to 1)
 		[Range(-1, 1)] public float slide;
-		// Accelerates the slide (-1 to 1)
+		/// Accelerates the slide (-1 to 1)
 		[Range(-1, 1)] public float deltaSlide;
 
-		// Strength of the vibrato effect (0 to 1)
+		/// Strength of the vibrato effect (0 to 1)
 		[Range(0, 1)] public float vibratoDepth;
-		// Speed of the vibrato effect (i.e. frequency) (0 to 1)
+		/// Speed of the vibrato effect (i.e. frequency) (0 to 1)
 		[Range(0, 1)] public float vibratoSpeed;
 
-		// Shift in note, either up or down (-1 to 1)
+		/// Shift in note, either up or down (-1 to 1)
 		[Range(-1, 1)] public float changeAmount;
-		// How fast the note shift happens (only happens once) (0 to 1)
+		/// How fast the note shift happens (only happens once) (0 to 1)
 		[Range(0, 1)] public float changeSpeed;
 
-		// Controls the ratio between the up and down states of the square wave, changing the timbre (0 to 1)
+		/// Controls the ratio between the up and down states of the square wave, changing the timbre (0 to 1)
 		[Range(0, 1)] public float squareDuty;
 
-		// Sweeps the duty up or down (-1 to 1)
+		/// Sweeps the duty up or down (-1 to 1)
 		[Range(-1, 1)] public float dutySweep;
-		// Speed of the note repeating - certain variables are reset each time (0 to 1)
+		/// Speed of the note repeating - certain variables are reset each time (0 to 1)
 		[Range(0, 1)] public float repeatSpeed;
 
-		// Offsets a second copy of the wave by a small phase, changing the timbre (-1 to 1)
+		/// Offsets a second copy of the wave by a small phase, changing the timbre (-1 to 1)
 		[Range(-1, 1)] public float phaserOffset;
-		// Sweeps the phase up or down (-1 to 1)
+		/// Sweeps the phase up or down (-1 to 1)
 		[Range(-1, 1)] public float phaserSweep;
 	
-		// Frequency at which the low-pass filter starts attenuating higher frequencies (0 to 1)
+		/// Frequency at which the low-pass filter starts attenuating higher frequencies (0 to 1)
 		[Range(0, 1)] public float lpFilterCutoff;
-		// Sweeps the low-pass cutoff up or down (-1 to 1)
+		/// Sweeps the low-pass cutoff up or down (-1 to 1)
 		[Range(-1, 1)] public float lpFilterCutoffSweep;
-		// Changes the attenuation rate for the low-pass filter, changing the timbre (0 to 1)
+		/// Changes the attenuation rate for the low-pass filter, changing the timbre (0 to 1)
 		[Range(0, 1)] public float lpFilterResonance;
 
-		// Frequency at which the high-pass filter starts attenuating lower frequencies (0 to 1)
+		/// Frequency at which the high-pass filter starts attenuating lower frequencies (0 to 1)
 		[Range(0, 1)] public float hpFilterCutoff;
 
-		// Sweeps the high-pass cutoff up or down (-1 to 1)
+		/// Sweeps the high-pass cutoff up or down (-1 to 1)
 		[Range(-1, 1)] public float hpFilterCutoffSweep;
 
 		// From BFXR
-		// Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation (0 to 1)
+		/// Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation (0 to 1)
 		[Range(0, 1)] public float changeRepeat;
-		// Shift in note, either up or down (-1 to 1)
+		/// Shift in note, either up or down (-1 to 1)
 		[Range(-1, 1)] public float changeAmount2;
-		// How fast the note shift happens (only happens once) (0 to 1)
+		/// How fast the note shift happens (only happens once) (0 to 1)
 		[Range(0, 1)] public float changeSpeed2;
-		// Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound
-		// effects, where you want them to stick out against background music (0 to 1)
+		/// Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound
+		/// effects, where you want them to stick out against background music (0 to 1)
 		[Range(0, 1)] public float compressionAmount;
-		// Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or
-		// otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!) (0 to 1)
+		/// Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or
+		/// otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!) (0 to 1)
 		[Range(0, 1)] public float overtones;
-		// Harmonics falloff: the rate at which higher overtones should decay (0 to 1)
+		/// Harmonics falloff: the rate at which higher overtones should decay (0 to 1)
 		[Range(0, 1)] public float overtoneFalloff;
-		// Bit crush: resamples the audio at a lower frequency (0 to 1)
+		/// Bit crush: resamples the audio at a lower frequency (0 to 1)
 		[Range(0, 1)] public float bitCrush;
-		// Bit crush sweep: sweeps the Bit Crush filter up or down (-1 to 1)
+		/// Bit crush sweep: sweeps the Bit Crush filter up or down (-1 to 1)
 		[Range(-1, 1)] public float bitCrushSweep;
 
 
-		/**
-	 * Resets the parameters, used at the start of each generate function
-	 */
+		/// <summary>
+		/// Resets the parameters, used at the start of each generate function
+		/// </summary>
 		public void Reset() {
 			waveType       = 0;
 			masterVolume   = 1f;
@@ -141,50 +141,48 @@ namespace usfxr {
 			bitCrushSweep = 0.0f;
 		}
 
-
-		// Randomization methods
-
-		/**
-	 * Randomly adjusts the parameters ever so slightly
-	 */
-		public void Mutate(float __mutation = 0.05f) {
-			if (GetRandomBool()) startFrequency      += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) minFrequency        += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) slide               += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) deltaSlide          += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) squareDuty          += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) dutySweep           += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) vibratoDepth        += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) vibratoSpeed        += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) attackTime          += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) sustainTime         += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) decayTime           += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) sustainPunch        += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) lpFilterCutoff      += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) lpFilterCutoffSweep += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) lpFilterResonance   += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) hpFilterCutoff      += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) hpFilterCutoffSweep += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) phaserOffset        += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) phaserSweep         += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) repeatSpeed         += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) changeSpeed         += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) changeAmount        += GetRandom() * __mutation * 2f - __mutation;
+		/// <summary>
+		/// Randomly adjust the parameters ever so slightly
+		/// </summary>
+		/// <param name="amount"></param>
+		public void Mutate(float amount = 0.05f) {
+			if (GetRandomBool()) startFrequency      += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) minFrequency        += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) slide               += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) deltaSlide          += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) squareDuty          += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) dutySweep           += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) vibratoDepth        += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) vibratoSpeed        += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) attackTime          += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) sustainTime         += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) decayTime           += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) sustainPunch        += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) lpFilterCutoff      += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) lpFilterCutoffSweep += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) lpFilterResonance   += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) hpFilterCutoff      += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) hpFilterCutoffSweep += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) phaserOffset        += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) phaserSweep         += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) repeatSpeed         += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) changeSpeed         += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) changeAmount        += GetRandom() * amount * 2f - amount;
 
 			// From BFXR
-			if (GetRandomBool()) changeRepeat      += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) changeAmount2     += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) changeSpeed2      += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) compressionAmount += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) overtones         += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) overtoneFalloff   += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) bitCrush          += GetRandom() * __mutation * 2f - __mutation;
-			if (GetRandomBool()) bitCrushSweep     += GetRandom() * __mutation * 2f - __mutation;
+			if (GetRandomBool()) changeRepeat      += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) changeAmount2     += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) changeSpeed2      += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) compressionAmount += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) overtones         += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) overtoneFalloff   += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) bitCrush          += GetRandom() * amount * 2f - amount;
+			if (GetRandomBool()) bitCrushSweep     += GetRandom() * amount * 2f - amount;
 		}
-
-		/**
-	 * Sets all parameters to random values
-	 */
+		
+		/// <summary>
+		/// Sets all parameters to random values
+		/// </summary>
 		public void Randomize() {
 			Reset();
 
@@ -249,13 +247,10 @@ namespace usfxr {
 			bitCrushSweep = GetRandom() * 2f - 1f;
 		}
 
-
-		// Setting string methods
-
-		/**
-	 * Returns a string representation of the parameters for copy/paste sharing in the old format (24 parameters, SFXR/AS3SFXR compatible)
-	 * @return	A comma-delimited list of parameter values
-	 */
+		/// <summary>
+		/// Returns a string representation of the parameters for copy/paste sharing in the old format (24 parameters, SFXR/AS3SFXR compatible)
+		/// </summary>
+		/// <returns>A comma-delimited list of parameter values</returns>
 		public string GetSettingsStringLegacy() {
 			var str = "";
 
@@ -288,10 +283,10 @@ namespace usfxr {
 			return str;
 		}
 
-		/**
-	 * Returns a string representation of the parameters for copy/paste sharing in the new format (32 parameters, BFXR compatible)
-	 * @return	A comma-delimited list of parameter values
-	 */
+		/// <summary>
+		/// Returns a string representation of the parameters for copy/paste sharing in the new format (32 parameters, BFXR compatible)
+		/// </summary>
+		/// <returns>A comma-delimited list of parameter values</returns>
 		public string GetSettingsString() {
 			var str = "";
 
@@ -333,13 +328,12 @@ namespace usfxr {
 			return str;
 		}
 
-		/**
-	 * Parses a settings string into the parameters
-	 * @param	string	Settings string to parse
-	 * @return			If the string successfully parsed
-	 */
-		public bool SetSettingsString(string __string) {
-			var values = __string.Split(',');
+		/// <summary>
+		/// Parses a settings string into the parameters
+		/// </summary>
+		/// <returns>If the string successfully parsed</returns>
+		public bool SetSettingsString(string input) {
+			var values = input.Split(',');
 
 			if (values.Length == 24) {
 				// Old format (SFXR): 24 parameters
@@ -406,21 +400,17 @@ namespace usfxr {
 				bitCrush            = ParseFloat(values[30]);
 				bitCrushSweep       = ParseFloat(values[31]);
 			} else {
-				Debug.LogError("Could not paste settings string: parameters contain " + values.Length + " values (was expecting 24 or >32)");
+				Debug.LogError(
+					$"Could not paste settings string: parameters contain {values.Length} values (was expecting 24 or >32)");
 				return false;
 			}
 
 			return true;
 		}
 
-		// Utility methods
-
-		/**
-	 * Faster power function; this function takes about 36% of the time Mathf.Pow() would take in our use cases
-	 * @param	base		Base to raise to power
-	 * @param	power		Power to raise base by
-	 * @return				The calculated power
-	 */
+		/// <summary>
+		/// Faster power function; this function takes about 36% of the time Mathf.Pow() would take in our use cases
+		/// </summary>
 		float Pow(float @base, int power) {
 			switch(power) {
 				case 2: return @base * @base;
@@ -432,46 +422,40 @@ namespace usfxr {
 			return 1f;
 		}
 
-
-		// ================================================================================================================
-		// INTERNAL INTERFACE ---------------------------------------------------------------------------------------------
-
-		/**
-	 * Returns the number as a string to 4 decimal places
-	 * @param	value	Number to convert
-	 * @return			Number to 4dp as a string
-	 */
+		/// <summary>
+		/// Returns the number as a string to 4 decimal places
+		/// </summary>
 		string To4DP(float value) {
 			if (value < 0.0001f && value > -0.0001f) return "";
 			return value.ToString("#.####");
 		}
 
-		/**
-	 * Parses a string into an uint value; also returns 0 if the string is empty, rather than an error
-	 */
+		/// <summary>
+		/// Parses a string into an uint value; also returns 0 if the string is empty, rather than an error
+		/// </summary>
 		uint ParseUint(string value) {
 			return value.Length == 0 ? 0 : uint.Parse(value);
 		}
 
-		/**
-	 * Parses a string into a float value; also returns 0 if the string is empty, rather than an error
-	 */
+		/// <summary>
+		/// Parses a string into a float value; also returns 0 if the string is empty, rather than an error
+		/// </summary>
 		float ParseFloat(string value) {
 			if (value.Length == 0) return 0;
 			return float.Parse(value);
 		}
 
-		/**
-	 * Returns a random value: bigger than or equal to 0, smaller than 1
-	 * This function is needed so we can follow the original code more strictly, unitys random may return 1
-	 */
+		/// <summary>
+		/// Returns a random value: bigger than or equal to 0, smaller than 1
+		/// This function is needed so we can follow the original code more strictly, Unitys random may return 1
+		/// </summary>
 		public static float GetRandom() {
 			return UnityEngine.Random.value % 1;
 		}
 
-		/**
-	 * Returns a boolean value
-	 */
+		/// <summary>
+		/// Returns a boolean value
+		/// </summary>
 		public static bool GetRandomBool() {
 			return UnityEngine.Random.value > 0.5f;
 		}

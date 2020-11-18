@@ -1,8 +1,9 @@
 ﻿namespace usfxr {
 	public static class SfxrPreset {
-		/**
-	 * Sets the parameters to generate a pickup/coin sound
-	 */
+		
+		/// <summary>
+		/// Sets the parameters to generate a pickup/coin sound
+		/// </summary>
 		public static SfxrParams PickupCoin() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -20,9 +21,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate a laser/shoot sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate a laser/shoot sound
+		/// </summary>
 		public static SfxrParams LaserShoot() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -65,9 +66,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate an explosion sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate an explosion sound
+		 /// </summary>
 		public static SfxrParams Explosion() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -104,9 +105,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate a powerup sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate a powerup sound
+		 /// </summary>
 		public static SfxrParams PowerUp() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -137,9 +138,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate a hit/hurt sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate a hit/hurt sound
+		 /// </summary>
 		public static SfxrParams HitHurt() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -162,9 +163,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate a jump sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate a jump sound
+		 /// </summary>
 		public static SfxrParams Jump() {
 			var p = new SfxrParams();
 			p.Reset();
@@ -183,9 +184,9 @@
 			return p;
 		}
 
-		/**
-	 * Sets the parameters to generate a blip/select sound
-	 */
+		/// <summary>
+		/// Sets the parameters to generate a blip/select sound
+		 /// </summary>
 		public static SfxrParams BlipSelect() {
 			var p = new SfxrParams();
 			p.Reset();

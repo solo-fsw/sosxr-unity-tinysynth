@@ -1,4 +1,8 @@
 ﻿namespace usfxr {
+	
+	/// <summary>
+	/// Defines the wave shape used by the synthesiser
+	/// </summary>
 	public enum WaveType : uint {
 		Square    = 0,
 		Sawtooth  = 1,

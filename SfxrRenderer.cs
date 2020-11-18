@@ -1,13 +1,11 @@
 using System;
-using System.Diagnostics;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace usfxr {
-
+	
 	/// <summary>
-/// Renders audio in preparation for playing
-/// </summary>
+	/// Renders audio in preparation for playing
+	/// </summary>
 	public class SfxrRenderer {
 
 		const int LoResNoisePeriod = 8; // Should be < 32
@@ -39,7 +37,7 @@ namespace usfxr {
 		float sustainPunch; // The punch factor (louder at begining of sustain)
 
 		int   phase;         // Phase through the wave
-		float pos;           // Phase expresed as a Number from 0-1, used for fast sin approx
+		float pos;           // Phase expressed as a Number from 0-1, used for fast sin approx
 		float period;        // Period of the wave
 		float periodTemp;    // Period modified by vibrato
 		int   periodTempInt; // Period modified by vibrato (as an Int)
@@ -76,7 +74,7 @@ namespace usfxr {
 		float lpFilterDeltaPos;    // Change in low-pass wave position, as allowed by the cutoff and damping
 		float lpFilterCutoff;      // Cutoff multiplier which adjusts the amount the wave position can move
 		float lpFilterDeltaCutoff; // Speed of the low-pass cutoff multiplier
-		float lpFilterDamping;     // Damping muliplier which restricts how fast the wave position can move
+		float lpFilterDamping;     // Damping multiplier which restricts how fast the wave position can move
 		bool  lpFilterOn;          // If the low pass filter is active
 
 		float hpFilterPos;         // Adjusted wave position after high-pass filter
@@ -120,6 +118,9 @@ namespace usfxr {
 			this.param = param;
 		}
 
+		/// <summary>
+		/// Synchronously generates a Unity AudioClip
+		/// </summary>
 		public AudioClip GenerateClip() {
 			// var s = new Stopwatch();
 			// s.Start();
@@ -222,14 +223,11 @@ namespace usfxr {
 		}
 
 
-		// ================================================================================================================
-		// INTERNAL INTERFACE ---------------------------------------------------------------------------------------------
-
-		/**
-	 * Resets the running variables from the params
-	 * Used once at the start (total reset) and for the repeat effect (partial reset)
-	 * @param	totalReset	If the reset is total
-	 */
+		/// <summary>
+		/// Resets the running variables from the params
+		/// Used once at the start (total reset) and for the repeat effect (partial reset)
+		/// @param	totalReset	If the reset is total
+		/// </summary>
 		void Reset(bool totalReset) {
 			// Shorter reference
 			var p = param;
@@ -373,12 +371,9 @@ namespace usfxr {
 			}
 		}
 
-		/**
-	 * Writes the wave to the supplied buffer array of floats (it'll contain the mono audio)
-	 * @param	buffer		A float[] to write the wave to
-	 * @param	waveData	If the wave should be written for the waveData
-	 * @return				If the wave is finished
-	 */
+		/// <summary>
+		/// Writes the wave to the supplied buffer array of floats (it'll contain the mono audio)
+		/// </summary>
 		bool SynthWave(float[] buffer, int bufferPos, uint length) {
 			var finished = false;
 			for (var i = 0; i < (int) length; i++) {
@@ -664,12 +659,7 @@ namespace usfxr {
 				} else {
 					superSample = -Mathf.Pow(-superSample, compressionFactor);
 				}
-
-				// BFXR leftover:
-				//if (muted) {
-				//	superSample = 0;
-				//}
-
+				
 				// Clipping if too loud
 				if (superSample < -1f) {
 					superSample = -1f;
@@ -684,26 +674,26 @@ namespace usfxr {
 			return false;
 		}
 
-		/**
-	 * Writes a short (Int16) to a byte array.
-	 * This is an aux function used when creating the WAV data.
-	 */
+		/// <summary>
+		/// Writes a short (Int16) to a byte array.
+		/// This is an aux function used when creating the WAV data.
+		/// </summary>
 		static void writeShortToBytes(byte[] bytes, ref int position, short newShort, Endian endian) {
 			writeBytes(bytes, ref position, new byte[2] { (byte)((newShort >> 8) & 0xff), (byte)(newShort & 0xff) }, endian);
 		}
 
-		/**
-	 * Writes a uint (UInt32) to a byte array.
-	 * This is an aux function used when creating the WAV data.
-	 */
+		/// <summary>
+		/// Writes a uint (UInt32) to a byte array.
+		/// This is an aux function used when creating the WAV data.
+		/// </summary>
 		static void writeUintToBytes(byte[] bytes, ref int position, uint newUint, Endian endian) {
 			writeBytes(bytes, ref position, new[] { (byte)((newUint >> 24) & 0xff), (byte)((newUint >> 16) & 0xff), (byte)((newUint >> 8) & 0xff), (byte)(newUint & 0xff) }, endian);
 		}
 
-		/**
-	 * Writes any number of bytes into a byte array, at a given position.
-	 * This is an aux function used when creating the WAV data.
-	 */
+		/// <summary>
+		/// Writes any number of bytes into a byte array, at a given position.
+		/// This is an aux function used when creating the WAV data.
+		/// </summary>
 		static void writeBytes(byte[] bytes, ref int position, byte[] newBytes, Endian endian) {
 			// Writes newBytes to bytes at position position, increasing the position depending on the length of newBytes
 			for (var i = 0; i < newBytes.Length; i++) {
@@ -714,17 +704,11 @@ namespace usfxr {
 	}
 
 
-// ================================================================================================================
-// AUX CLASSES ----------------------------------------------------------------------------------------------------
-
-/*
-Pink Number
------------
-From BFXR
-Class taken from http://www.firstpr.com.au/dsp/pink-noise/#Filtering
-*/
-
-	public class PinkNumber {
+/// <summary>
+/// From BFXR
+/// Class taken from http: //www.firstpr.com.au/dsp/pink-noise/#Filtering
+/// </summary>
+internal class PinkNumber {
 		// Properties
 		readonly int           maxKey;
 		int                    key;

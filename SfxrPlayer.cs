@@ -43,6 +43,14 @@ namespace usfxr {
 			PlayClip(entry.clip);
 		}
 
+		static void PlayClip(AudioClip clip) {
+			if (instance == null) instance = FindObjectOfType<SfxrPlayer>();
+			if (instance == null) Debug.LogError($"No {nameof(SfxrPlayer)} found in Scene. Add one!");
+			var audioSource = instance.GetComponent<AudioSource>();
+			audioSource.clip = clip;
+			audioSource.Play();
+		}
+		
 		static void Purge() {
 			if (cache.Count < MaxCacheSize) return;
 
@@ -59,15 +67,6 @@ namespace usfxr {
 
 			cache.Remove(oldest);
 		}
-
-		static void PlayClip(AudioClip clip) {
-			if (instance == null) instance = FindObjectOfType<SfxrPlayer>();
-			if (instance == null) Debug.LogError($"No {nameof(SfxrPlayer)} found in Scene. Add one!");
-			var audioSource = instance.GetComponent<AudioSource>();
-			audioSource.clip = clip;
-			audioSource.Play();
-		}
-
 
 		static long GetTimestamp() {
 			return DateTimeOffset.Now.ToUnixTimeSeconds();
