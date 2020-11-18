@@ -28,12 +28,12 @@ To play this sound effect, call the static function on `SfxrPlayer`:
     
 That's it!
 
- Issues
+ Todo
  ------------
- 
- * Sounds are not cached until they are played, this causes latency spikes
- * Playback is monophonic, only one sample at a time 
- * No support for import/export as strings
- * Undo/redo history
+ * Cache sounds before they are played (avoids latency spikes)
+ * Allow for playback of more than one effect at a time
+ * Add support for import/export as strings
+ * Add Undo/redo history
  * Mutations do not work yet
- * Editor UI implementation is rather bad
+ * Add locking of parameters when mutating
+ * Improve Editor UI implementation (it's not very good)
