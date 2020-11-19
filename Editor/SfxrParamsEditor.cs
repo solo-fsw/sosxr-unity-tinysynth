@@ -71,18 +71,19 @@ namespace usfxr {
 		}
 
 		static void SetParam(SerializedProperty property, SfxrParams param) {
+			
 			var target = property.serializedObject.targetObject;
 			var type   = target.GetType();
 			var field  = type.GetField(property.name);
 			field.SetValue(target, param);
-			SfxrPlayer.Play(param);
+			// SfxrPlayer.Play(param, true);
 		}
 
 		static void Preview(SerializedProperty property) {
 			var target = property.serializedObject.targetObject;
 			var type   = target.GetType();
 			var field  = type.GetField(property.name);
-			SfxrPlayer.Play((SfxrParams) field.GetValue(target));
+			SfxrPlayer.Play((SfxrParams) field.GetValue(target), true);
 		}
 	}
 }
