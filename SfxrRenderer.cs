@@ -109,7 +109,7 @@ namespace usfxr {
 		float[]    loResNoiseBuffer; // Buffer of random values used to generate Tan waveform
 
 		// Temp
-		float superSample;						// Actual sample writen to the wave
+		float superSample;						// Actual sample written to the wave
 		float sample;							// Sub-sample calculated 8 times per actual sample, averaged out to get the super sample
 		float sample2;							// Used in other calculations
 		float amp;								// Used in other calculations
