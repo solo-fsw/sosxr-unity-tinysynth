@@ -7,6 +7,10 @@ using UnityEngine;
 namespace usfxr {
 	[CustomPropertyDrawer(typeof(SfxrParams))]
 	public class SfxrParamsEditor : PropertyDrawer {
+		
+		const int RangeScale = 100;
+		const float RangeScaleToNormalized = 1f / RangeScale;
+
 		struct ParamData {
 			public int    min;
 			public int    max;
@@ -57,13 +61,13 @@ namespace usfxr {
 
 			EditorGUILayout.BeginHorizontal();
 			property.floatValue = EditorGUILayout.IntSlider(label,
-				Mathf.RoundToInt(property.floatValue * 100f),
+				Mathf.RoundToInt(property.floatValue * RangeScale),
 				data.min,
-				data.max) * .01f;
+				data.max) * RangeScaleToNormalized;
 
 			if (GUILayout.Button(new GUIContent("R", "Reset this parameter to its default value"),
 				GUILayout.Width(20))) {
-				property.floatValue = data.@default;
+				property.floatValue = data.@default * RangeScaleToNormalized;
 			}
 			
 			EditorGUILayout.EndHorizontal();
@@ -146,17 +150,16 @@ namespace usfxr {
 				var data = new ParamData { @default = 0, min = 0, max = 1 };
 
 				if (field.GetCustomAttribute(typeof(RangeAttribute)) is RangeAttribute rangeAttribute) {
-					data.max = Mathf.RoundToInt(rangeAttribute.max * 100);
-					data.min = Mathf.RoundToInt(rangeAttribute.min * 100);
+					data.max = Mathf.RoundToInt(rangeAttribute.max * RangeScale);
+					data.min = Mathf.RoundToInt(rangeAttribute.min * RangeScale);
 				} 
 				
 				if (field.GetCustomAttribute(typeof(TooltipAttribute)) is TooltipAttribute tooltipAttribute) {
 					data.tooltip = tooltipAttribute.tooltip;
-				} 
-				
-				var sfxDefault = field.GetCustomAttribute(typeof(SfxrDefault)) as SfxrDefault;
-				if (sfxDefault != null) {
-					data.@default = Mathf.RoundToInt(sfxDefault.value * 100);
+				}
+
+				if (field.GetCustomAttribute(typeof(SfxrDefault)) is SfxrDefault sfxDefault) {
+					data.@default = Mathf.RoundToInt(sfxDefault.value * RangeScale);
 				}
 				
 				paramData.Add(field.Name, data);
