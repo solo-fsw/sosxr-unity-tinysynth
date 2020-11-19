@@ -47,8 +47,7 @@ namespace usfxr {
 			if (instance == null) instance = FindObjectOfType<SfxrPlayer>();
 			if (instance == null) Debug.LogError($"No {nameof(SfxrPlayer)} found in Scene. Add one!");
 			var audioSource = instance.GetComponent<AudioSource>();
-			audioSource.clip = clip;
-			audioSource.Play();
+			audioSource.PlayOneShot(clip);
 		}
 		
 		static void Purge() {
