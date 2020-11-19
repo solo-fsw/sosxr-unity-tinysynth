@@ -33,6 +33,7 @@ namespace usfxr {
 			}
 			
 			if (!EditorGUI.EndChangeCheck()) return;
+			property.serializedObject.ApplyModifiedProperties();
 			Preview(property);
 		}
 
