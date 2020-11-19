@@ -30,6 +30,7 @@ namespace usfxr {
 
 		void Start() {
 			cache.Clear();
+			UpdateSources();
 		}
 
 		void OnValidate() {
@@ -46,6 +47,7 @@ namespace usfxr {
 				numSources--;
 			}
 
+			UpdateSources();
 		}
 
 		/// <summary>
@@ -71,13 +73,9 @@ namespace usfxr {
 		}
 
 		static void PlayClip(AudioClip clip, bool asPreview) {
-			if (instance == null) instance = FindObjectOfType<SfxrPlayer>();
-			if (instance == null) {
-				Debug.LogError($"No {nameof(SfxrPlayer)} found in Scene. Add one!");
-				return;
-			}
-			
-			if (sources == null)  sources = instance.GetComponents<AudioSource>();
+			UpdateInstance();
+
+			if (sources == null) UpdateSources();
 			if (sources.Length == 0) {
 				Debug.LogError($"No {nameof(AudioSource)} found in on GameObject that has {nameof(SfxrPlayer)}. Add one!");
 				return;
@@ -90,7 +88,19 @@ namespace usfxr {
 				sourceIndex = (sourceIndex + 1) % sources.Length;
 			}
 		}
-		
+
+		static void UpdateInstance() {
+			if (instance == null) instance = FindObjectOfType<SfxrPlayer>();
+			if (instance == null) {
+				Debug.LogError($"No {nameof(SfxrPlayer)} found in Scene. Add one!");
+			}
+		}
+
+		static void UpdateSources() {
+			UpdateInstance();
+			sources = instance.GetComponents<AudioSource>();
+		}
+
 		static void Purge() {
 			if (cache.Count < MaxCacheSize) return;
 
