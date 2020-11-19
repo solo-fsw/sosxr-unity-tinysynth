@@ -8,9 +8,10 @@ namespace usfxr {
 	[CustomPropertyDrawer(typeof(SfxrParams))]
 	public class SfxrParamsEditor : PropertyDrawer {
 		struct ParamData {
-			public int min;
-			public int max;
-			public int @default;
+			public int    min;
+			public int    max;
+			public int    @default;
+			public string tooltip;
 		}
 		
 		bool                                 expand;
@@ -50,20 +51,29 @@ namespace usfxr {
 		}
 
 		static void WidgetSlider(SerializedProperty property) {
-			var label = new GUIContent(property.displayName);
 			if (!paramData.TryGetValue(property.name, out var data)) return;
+			
+			var label = new GUIContent(property.displayName, data.tooltip);
 
+			EditorGUILayout.BeginHorizontal();
 			property.floatValue = EditorGUILayout.IntSlider(label,
 				Mathf.RoundToInt(property.floatValue * 100f),
 				data.min,
 				data.max) * .01f;
+
+			if (GUILayout.Button(new GUIContent("R", "Reset this parameter to its default value"),
+				GUILayout.Width(20))) {
+				property.floatValue = data.@default;
+			}
+			
+			EditorGUILayout.EndHorizontal();
 		}
 
 		static void WidgetWaveType(SerializedProperty property) {
 			EditorGUILayout.PropertyField(property);
 		}
 
-		void OnPresetGUI(SerializedProperty property) {
+		static void OnPresetGUI(SerializedProperty property) {
 			EditorGUILayout.BeginHorizontal();
 			if (GUILayout.Button("LASER/SHOOT")) SetParam(property, SfxrPreset.LaserShoot());
 			if (GUILayout.Button("PICKUP/COIN")) SetParam(property, SfxrPreset.PickupCoin());
@@ -138,6 +148,10 @@ namespace usfxr {
 				if (field.GetCustomAttribute(typeof(RangeAttribute)) is RangeAttribute rangeAttribute) {
 					data.max = Mathf.RoundToInt(rangeAttribute.max * 100);
 					data.min = Mathf.RoundToInt(rangeAttribute.min * 100);
+				} 
+				
+				if (field.GetCustomAttribute(typeof(TooltipAttribute)) is TooltipAttribute tooltipAttribute) {
+					data.tooltip = tooltipAttribute.tooltip;
 				} 
 				
 				var sfxDefault = field.GetCustomAttribute(typeof(SfxrDefault)) as SfxrDefault;

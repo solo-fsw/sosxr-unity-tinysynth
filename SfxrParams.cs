@@ -18,85 +18,116 @@ namespace usfxr {
 	[Serializable]
 	public struct SfxrParams {
 		/// Shape of wave to generate 
-		[SerializeField] public WaveType waveType;
+		[SfxrDefault(1)] [SerializeField] public WaveType waveType;
 
 		/// Overall volume of the sound (0 to 1)
+		[Tooltip("Overall volume of the sound")]
 		[SfxrDefault(1)] [Range(0, 1)] public float masterVolume;
 
 		/// Length of the volume envelope attack (0 to 1)
+		[Tooltip("Length of the volume envelope attack")]
 		[SfxrDefault(0)] [Range(0, 1)] public float attackTime;
 		/// Length of the volume envelope sustain (0 to 1)
+		[Tooltip("Length of the volume envelope sustain")]
 		[SfxrDefault(0)] [Range(0, 1)] public float sustainTime;
 		/// Tilts the sustain envelope for more 'pop' (0 to 1)
+		[Tooltip("Tilts the sustain envelope for more 'pop'")]
 		[SfxrDefault(0)] [Range(0, 1)] public float sustainPunch;
 		/// Length of the volume envelope decay (yes, I know it's called release) (0 to 1)
+		[Tooltip("Length of the volume envelope decay (yes, I know it's called release)")]
 		[SfxrDefault(0)] [Range(0, 1)] public float decayTime;
 
 		/// Base note of the sound (0 to 1)
+		[Tooltip("Base note of the sound")]
 		[SfxrDefault(.3f)] [Range(0, 1)] public float startFrequency;
 
 		/// If sliding, the sound will stop at this frequency, to prevent really low notes (0 to 1)
+		[Tooltip("If sliding, the sound will stop at this frequency, to prevent really low notes")]
 		[SfxrDefault(0)] [Range(0, 1)] public float minFrequency;
 
 		/// Slides the note up or down (-1 to 1)
+		[Tooltip("Slides the note up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float slide;
 		/// Accelerates the slide (-1 to 1)
+		[Tooltip("Accelerates the slide")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float deltaSlide;
 
 		/// Strength of the vibrato effect (0 to 1)
+		[Tooltip("Strength of the vibrato effect")]
 		[SfxrDefault(0)] [Range(0, 1)] public float vibratoDepth;
 		/// Speed of the vibrato effect (i.e. frequency) (0 to 1)
+		[Tooltip("Speed of the vibrato effect (i.e. frequency)")]
 		[SfxrDefault(0)] [Range(0, 1)] public float vibratoSpeed;
 
 		/// Shift in note, either up or down (-1 to 1)
+		[Tooltip("Shift in note, either up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float changeAmount;
 		/// How fast the note shift happens (only happens once) (0 to 1)
+		[Tooltip("How fast the note shift happens (only happens once)")]
 		[SfxrDefault(0)] [Range(0, 1)] public float changeSpeed;
 
 		/// Controls the ratio between the up and down states of the square wave, changing the timbre (0 to 1)
+		[Tooltip("Controls the ratio between the up and down states of the square wave, changing the timbre")]
 		[SfxrDefault(0)] [Range(0, 1)] public float squareDuty;
 
 		/// Sweeps the duty up or down (-1 to 1)
+		[Tooltip("Sweeps the duty up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float dutySweep;
 		/// Speed of the note repeating - certain variables are reset each time (0 to 1)
+		[Tooltip("Speed of the note repeating - certain variables are reset each time")]
 		[SfxrDefault(0)] [Range(0, 1)] public float repeatSpeed;
 
 		/// Offsets a second copy of the wave by a small phase, changing the timbre (-1 to 1)
+		[Tooltip("Offsets a second copy of the wave by a small phase, changing the timbre")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float phaserOffset;
 		/// Sweeps the phase up or down (-1 to 1)
+		[Tooltip("Sweeps the phase up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float phaserSweep;
 	
 		/// Frequency at which the low-pass filter starts attenuating higher frequencies (0 to 1)
+		[Tooltip("Frequency at which the low-pass filter starts attenuating higher frequencies")]
 		[SfxrDefault(1)] [Range(0, 1)] public float lpFilterCutoff;
 		/// Sweeps the low-pass cutoff up or down (-1 to 1)
+		[Tooltip("Sweeps the low-pass cutoff up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float lpFilterCutoffSweep;
 		/// Changes the attenuation rate for the low-pass filter, changing the timbre (0 to 1)
+		[Tooltip("Changes the attenuation rate for the low-pass filter, changing the timbre")]
 		[SfxrDefault(0)] [Range(0, 1)] public float lpFilterResonance;
 
 		/// Frequency at which the high-pass filter starts attenuating lower frequencies (0 to 1)
+		[Tooltip("Frequency at which the high-pass filter starts attenuating lower frequencies")]
 		[SfxrDefault(0)] [Range(0, 1)] public float hpFilterCutoff;
 
 		/// Sweeps the high-pass cutoff up or down (-1 to 1)
+		[Tooltip("Sweeps the high-pass cutoff up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float hpFilterCutoffSweep;
 
 		// From BFXR
 		/// Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation (0 to 1)
+		[Tooltip("Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation")]
 		[SfxrDefault(0)] [Range(0, 1)] public float changeRepeat;
 		/// Shift in note, either up or down (-1 to 1)
+		[Tooltip("Shift in note, either up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float changeAmount2;
 		/// How fast the note shift happens (only happens once) (0 to 1)
+		[Tooltip("How fast the note shift happens (only happens once)")]
 		[SfxrDefault(0)] [Range(0, 1)] public float changeSpeed2;
 		/// Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound
 		/// effects, where you want them to stick out against background music (0 to 1)
+		[Tooltip("Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound effects, where you want them to stick out against background music")]
 		[SfxrDefault(.3f)] [Range(0, 1)] public float compressionAmount;
 		/// Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or
 		/// otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!) (0 to 1)
+		[Tooltip("Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!)")]
 		[SfxrDefault(0)] [Range(0, 1)] public float overtones;
 		/// Harmonics falloff: the rate at which higher overtones should decay (0 to 1)
+		[Tooltip("Harmonics falloff: the rate at which higher overtones should decay")]
 		[SfxrDefault(0)] [Range(0, 1)] public float overtoneFalloff;
 		/// Bit crush: resamples the audio at a lower frequency (0 to 1)
+		[Tooltip("Bit crush: resamples the audio at a lower frequency")]
 		[SfxrDefault(0)] [Range(0, 1)] public float bitCrush;
 		/// Bit crush sweep: sweeps the Bit Crush filter up or down (-1 to 1)
+		[Tooltip("Bit crush sweep: sweeps the Bit Crush filter up or down")]
 		[SfxrDefault(0)] [Range(-1, 1)] public float bitCrushSweep;
 
 
