@@ -14,7 +14,7 @@ Installation
  
  Usage
  ------------
- Add a `SfxrPlayer` to an object in your scene, the main camera is a good spot to put it. 
+ Add a the `SfxrPlayer` component to an object in your scene, the main camera is a good spot to put it. 
  
  Now, in any MonoBehaviour you wish to play a sound effect, add a public `SfxrParams` field:
     
