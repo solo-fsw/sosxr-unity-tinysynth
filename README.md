@@ -30,12 +30,21 @@ To play this sound effect, call the static function on `SfxrPlayer`:
     
 That's it!
 
+ Caching
+ ------------
+ 
+ It takes a few milliseconds to generate a sound effect, to keep things snappy they are cached once generated. If you wish to pre-cache your effects call:
+ 
+    SfxrPlayer.PreCache(this);
+    
+This can be done from any MonoBehaviour and will cache all effects across every behaviour despite only taking a reference to one.  
+    
  Todo
  ------------
- - [ ] Cache sounds before they are played (avoids latency spikes)
  - [ ] Add support for import/export as strings
  - [ ] Mutations do not work yet
  - [ ] Add locking of parameters when mutating
  - [ ] Improve Editor UI implementation (it's not very good)
+ - [x] Cache sounds before they are played (avoids latency spikes)
  - [x] Add Undo/redo history
  - [x] Allow for playback of more than one effect at a time
