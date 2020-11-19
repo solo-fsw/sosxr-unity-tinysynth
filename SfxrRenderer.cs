@@ -114,9 +114,6 @@ namespace usfxr {
 		float sample2;							// Used in other calculations
 		float amp;								// Used in other calculations
 
-		public SfxrRenderer(SfxrParams param) {
-			this.param = param;
-		}
 
 		/// <summary>
 		/// Synchronously generates a Unity AudioClip

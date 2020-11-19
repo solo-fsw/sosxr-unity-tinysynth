@@ -10,7 +10,7 @@ namespace usfxr {
 	
 	[RequireComponent(typeof(AudioSource))]
 	public class SfxrPlayer : MonoBehaviour {
-		struct ClipTimeTuple {
+		class ClipTimeTuple {
 			public AudioClip clip;
 			public long      time;
 		}
@@ -59,7 +59,8 @@ namespace usfxr {
 			Purge();
 
 			if (!cache.TryGetValue(param, out var entry)) {
-				if (sfxrRenderer == null) sfxrRenderer = new SfxrRenderer(param);
+				// we can reuse the same renderer, but we need to update the params
+				if (sfxrRenderer == null) sfxrRenderer = new SfxrRenderer();
 				sfxrRenderer.param = param;
 
 				entry = new ClipTimeTuple {
@@ -67,6 +68,11 @@ namespace usfxr {
 					time = GetTimestamp(),
 				};
 				cache.Add(param, entry);
+			}
+
+			// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
+			if (entry.clip == null) {
+				entry.clip = sfxrRenderer.GenerateClip();
 			}
 
 			PlayClip(entry.clip, asPreview);
