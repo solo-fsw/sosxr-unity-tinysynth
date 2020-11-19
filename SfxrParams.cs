@@ -3,93 +3,101 @@ using UnityEngine;
 
 namespace usfxr {
 	
+	[AttributeUsage(AttributeTargets.Field)]
+	public class SfxrDefault : Attribute {
+		public readonly float value;
+		public SfxrDefault(float value) {
+			this.value = value;
+		}
+	}
+
 	/// <summary>
 	/// Holds parameters used by SfxrSynth
 	/// </summary>
-	
+
 	[Serializable]
 	public struct SfxrParams {
 		/// Shape of wave to generate 
-		[SerializeField] public WaveType waveType; 
+		[SerializeField] public WaveType waveType;
 
 		/// Overall volume of the sound (0 to 1)
-		[Range(0, 1)] public float masterVolume;
+		[SfxrDefault(1)] [Range(0, 1)] public float masterVolume;
 
 		/// Length of the volume envelope attack (0 to 1)
-		[Range(0, 1)] public float attackTime;
+		[SfxrDefault(0)] [Range(0, 1)] public float attackTime;
 		/// Length of the volume envelope sustain (0 to 1)
-		[Range(0, 1)] public float sustainTime;
+		[SfxrDefault(0)] [Range(0, 1)] public float sustainTime;
 		/// Tilts the sustain envelope for more 'pop' (0 to 1)
-		[Range(0, 1)] public float sustainPunch;
+		[SfxrDefault(0)] [Range(0, 1)] public float sustainPunch;
 		/// Length of the volume envelope decay (yes, I know it's called release) (0 to 1)
-		[Range(0, 1)] public float decayTime;
+		[SfxrDefault(0)] [Range(0, 1)] public float decayTime;
 
 		/// Base note of the sound (0 to 1)
-		[Range(0, 1)] public float startFrequency;
+		[SfxrDefault(.3f)] [Range(0, 1)] public float startFrequency;
 
 		/// If sliding, the sound will stop at this frequency, to prevent really low notes (0 to 1)
-		[Range(0, 1)] public float minFrequency;
+		[SfxrDefault(0)] [Range(0, 1)] public float minFrequency;
 
 		/// Slides the note up or down (-1 to 1)
-		[Range(-1, 1)] public float slide;
+		[SfxrDefault(0)] [Range(-1, 1)] public float slide;
 		/// Accelerates the slide (-1 to 1)
-		[Range(-1, 1)] public float deltaSlide;
+		[SfxrDefault(0)] [Range(-1, 1)] public float deltaSlide;
 
 		/// Strength of the vibrato effect (0 to 1)
-		[Range(0, 1)] public float vibratoDepth;
+		[SfxrDefault(0)] [Range(0, 1)] public float vibratoDepth;
 		/// Speed of the vibrato effect (i.e. frequency) (0 to 1)
-		[Range(0, 1)] public float vibratoSpeed;
+		[SfxrDefault(0)] [Range(0, 1)] public float vibratoSpeed;
 
 		/// Shift in note, either up or down (-1 to 1)
-		[Range(-1, 1)] public float changeAmount;
+		[SfxrDefault(0)] [Range(-1, 1)] public float changeAmount;
 		/// How fast the note shift happens (only happens once) (0 to 1)
-		[Range(0, 1)] public float changeSpeed;
+		[SfxrDefault(0)] [Range(0, 1)] public float changeSpeed;
 
 		/// Controls the ratio between the up and down states of the square wave, changing the timbre (0 to 1)
-		[Range(0, 1)] public float squareDuty;
+		[SfxrDefault(0)] [Range(0, 1)] public float squareDuty;
 
 		/// Sweeps the duty up or down (-1 to 1)
-		[Range(-1, 1)] public float dutySweep;
+		[SfxrDefault(0)] [Range(-1, 1)] public float dutySweep;
 		/// Speed of the note repeating - certain variables are reset each time (0 to 1)
-		[Range(0, 1)] public float repeatSpeed;
+		[SfxrDefault(0)] [Range(0, 1)] public float repeatSpeed;
 
 		/// Offsets a second copy of the wave by a small phase, changing the timbre (-1 to 1)
-		[Range(-1, 1)] public float phaserOffset;
+		[SfxrDefault(0)] [Range(-1, 1)] public float phaserOffset;
 		/// Sweeps the phase up or down (-1 to 1)
-		[Range(-1, 1)] public float phaserSweep;
+		[SfxrDefault(0)] [Range(-1, 1)] public float phaserSweep;
 	
 		/// Frequency at which the low-pass filter starts attenuating higher frequencies (0 to 1)
-		[Range(0, 1)] public float lpFilterCutoff;
+		[SfxrDefault(1)] [Range(0, 1)] public float lpFilterCutoff;
 		/// Sweeps the low-pass cutoff up or down (-1 to 1)
-		[Range(-1, 1)] public float lpFilterCutoffSweep;
+		[SfxrDefault(0)] [Range(-1, 1)] public float lpFilterCutoffSweep;
 		/// Changes the attenuation rate for the low-pass filter, changing the timbre (0 to 1)
-		[Range(0, 1)] public float lpFilterResonance;
+		[SfxrDefault(0)] [Range(0, 1)] public float lpFilterResonance;
 
 		/// Frequency at which the high-pass filter starts attenuating lower frequencies (0 to 1)
-		[Range(0, 1)] public float hpFilterCutoff;
+		[SfxrDefault(0)] [Range(0, 1)] public float hpFilterCutoff;
 
 		/// Sweeps the high-pass cutoff up or down (-1 to 1)
-		[Range(-1, 1)] public float hpFilterCutoffSweep;
+		[SfxrDefault(0)] [Range(-1, 1)] public float hpFilterCutoffSweep;
 
 		// From BFXR
 		/// Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation (0 to 1)
-		[Range(0, 1)] public float changeRepeat;
+		[SfxrDefault(0)] [Range(0, 1)] public float changeRepeat;
 		/// Shift in note, either up or down (-1 to 1)
-		[Range(-1, 1)] public float changeAmount2;
+		[SfxrDefault(0)] [Range(-1, 1)] public float changeAmount2;
 		/// How fast the note shift happens (only happens once) (0 to 1)
-		[Range(0, 1)] public float changeSpeed2;
+		[SfxrDefault(0)] [Range(0, 1)] public float changeSpeed2;
 		/// Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound
 		/// effects, where you want them to stick out against background music (0 to 1)
-		[Range(0, 1)] public float compressionAmount;
+		[SfxrDefault(.3f)] [Range(0, 1)] public float compressionAmount;
 		/// Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or
 		/// otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!) (0 to 1)
-		[Range(0, 1)] public float overtones;
+		[SfxrDefault(0)] [Range(0, 1)] public float overtones;
 		/// Harmonics falloff: the rate at which higher overtones should decay (0 to 1)
-		[Range(0, 1)] public float overtoneFalloff;
+		[SfxrDefault(0)] [Range(0, 1)] public float overtoneFalloff;
 		/// Bit crush: resamples the audio at a lower frequency (0 to 1)
-		[Range(0, 1)] public float bitCrush;
+		[SfxrDefault(0)] [Range(0, 1)] public float bitCrush;
 		/// Bit crush sweep: sweeps the Bit Crush filter up or down (-1 to 1)
-		[Range(-1, 1)] public float bitCrushSweep;
+		[SfxrDefault(0)] [Range(-1, 1)] public float bitCrushSweep;
 
 
 		/// <summary>

@@ -7,12 +7,19 @@ using UnityEngine;
 namespace usfxr {
 	[CustomPropertyDrawer(typeof(SfxrParams))]
 	public class SfxrParamsEditor : PropertyDrawer {
-
-		bool               expand;
-		bool               expandPresets;
-		static FieldInfo[] paramFields;
+		struct ParamData {
+			public int min;
+			public int max;
+			public int @default;
+		}
+		
+		bool                                 expand;
+		bool                                 expandPresets;
+		static FieldInfo[]                   paramFields;
+		static Dictionary<string, ParamData> paramData;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
+			UpdateReflection();
 			expand = EditorGUILayout.BeginFoldoutHeaderGroup(expand, property.name, null, ShowHeaderContextMenu);
 			if (expand) OnExpandedGUI(property);
 			EditorGUILayout.EndFoldoutHeaderGroup();
@@ -28,13 +35,32 @@ namespace usfxr {
 			expandPresets = EditorGUILayout.Foldout(expandPresets, "Presets");
 			if (expandPresets) OnPresetGUI(property);
 			
-			foreach (var child in GetVisibleChildren(property)) {
-				EditorGUILayout.PropertyField(child, null, false);
+			foreach (var prop in GetVisibleChildren(property)) {
+				if (prop.type == "Enum") {
+					WidgetWaveType(prop);
+				} else if (prop.type == "float") {
+					WidgetSlider(prop);
+				}
 			}
 			
 			if (!EditorGUI.EndChangeCheck()) return;
 			property.serializedObject.ApplyModifiedProperties();
-			Preview(property);
+		
+			PlayPreview(property);
+		}
+
+		static void WidgetSlider(SerializedProperty property) {
+			var label = new GUIContent(property.displayName);
+			if (!paramData.TryGetValue(property.name, out var data)) return;
+
+			property.floatValue = EditorGUILayout.IntSlider(label,
+				Mathf.RoundToInt(property.floatValue * 100f),
+				data.min,
+				data.max) * .01f;
+		}
+
+		static void WidgetWaveType(SerializedProperty property) {
+			EditorGUILayout.PropertyField(property);
 		}
 
 		void OnPresetGUI(SerializedProperty property) {
@@ -51,7 +77,7 @@ namespace usfxr {
 
 		static void ShowHeaderContextMenu(Rect position) {
 			var menu = new GenericMenu();
-			menu.AddItem(new GUIContent("This is a placeholder menu for export/import things"), false, OnItemClicked);
+			menu.AddItem(new GUIContent("This is a placeholder menu for export and import things"), false, OnItemClicked);
 			menu.DropDown(position);
 		}
 
@@ -83,11 +109,6 @@ namespace usfxr {
 		/// This is needed to make the code that directly modifies SfxrParams play nice with the Unity undo system
 		/// </summary>
 		static void SetParam(SerializedProperty property, SfxrParams param) {
-			// cache the fields on SfxrParams, these won't change 
-			if (paramFields == null || paramFields.Length == 0) {
-				paramFields = typeof(SfxrParams).GetFields(BindingFlags.Public | BindingFlags.Instance);
-			}
-			
 			// iterate over all the fields
 			foreach (var field in paramFields) {
 				// find the corresponding property
@@ -103,7 +124,32 @@ namespace usfxr {
 			}
 		}
 
-		static void Preview(SerializedProperty property) {
+		static void UpdateReflection() {
+			if (paramFields != null && paramFields.Length > 0) return;
+			
+			// cache the fields on SfxrParams, these won't change 
+			paramFields = typeof(SfxrParams).GetFields(BindingFlags.Public | BindingFlags.Instance);
+			
+			// now we build a little lookup table with the range and default value attributes
+			paramData = new Dictionary<string, ParamData>();
+			foreach (var field in paramFields) {
+				var data = new ParamData { @default = 0, min = 0, max = 1 };
+
+				if (field.GetCustomAttribute(typeof(RangeAttribute)) is RangeAttribute rangeAttribute) {
+					data.max = Mathf.RoundToInt(rangeAttribute.max * 100);
+					data.min = Mathf.RoundToInt(rangeAttribute.min * 100);
+				} 
+				
+				var sfxDefault = field.GetCustomAttribute(typeof(SfxrDefault)) as SfxrDefault;
+				if (sfxDefault != null) {
+					data.@default = Mathf.RoundToInt(sfxDefault.value * 100);
+				}
+				
+				paramData.Add(field.Name, data);
+			}
+		}
+
+		static void PlayPreview(SerializedProperty property) {
 			var target = property.serializedObject.targetObject;
 			var type   = target.GetType();
 			var field  = type.GetField(property.name);
