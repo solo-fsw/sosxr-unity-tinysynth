@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,13 +8,18 @@ namespace usfxr {
 	[CustomPropertyDrawer(typeof(SfxrParams))]
 	public class SfxrParamsEditor : PropertyDrawer {
 
-		bool expand;
-		bool expandPresets;
-		
+		bool               expand;
+		bool               expandPresets;
+		static FieldInfo[] paramFields;
+
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			expand = EditorGUILayout.BeginFoldoutHeaderGroup(expand, property.name, null, ShowHeaderContextMenu);
 			if (expand) OnExpandedGUI(property);
 			EditorGUILayout.EndFoldoutHeaderGroup();
+		}
+
+		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
+			return base.GetPropertyHeight(property, label) - 19;
 		}
 
 		void OnExpandedGUI(SerializedProperty property) {
@@ -70,13 +77,29 @@ namespace usfxr {
 			} while (currentProperty.NextVisible(false));
 		}
 
+		/// <summary>
+		/// Iterates over all the fields in a SfxrParams instance and applies these to a serialized property
+		/// This is needed to make the code that directly modifies SfxrParams play nice with the Unity undo system
+		/// </summary>
 		static void SetParam(SerializedProperty property, SfxrParams param) {
+			// cache the fields on SfxrParams, these won't change 
+			if (paramFields == null || paramFields.Length == 0) {
+				paramFields = typeof(SfxrParams).GetFields(BindingFlags.Public | BindingFlags.Instance);
+			}
 			
-			var target = property.serializedObject.targetObject;
-			var type   = target.GetType();
-			var field  = type.GetField(property.name);
-			field.SetValue(target, param);
-			// SfxrPlayer.Play(param, true);
+			// iterate over all the fields
+			foreach (var field in paramFields) {
+				// find the corresponding property
+				var prop = property.FindPropertyRelative(field.Name);
+				
+				// apply the value from the SfxrParams struct to the SerializedProperty
+				// only enums and floats for now, add more as needed
+				if (prop.type == "Enum") {
+					prop.enumValueIndex = Convert.ToInt32(field.GetValue(param));
+				} else if (prop.type == "float") {
+					prop.floatValue = (float) field.GetValue(param);
+				}
+			}
 		}
 
 		static void Preview(SerializedProperty property) {
