@@ -5,7 +5,9 @@ This project is a reimagining of [usfxr](https://github.com/zeh/usfxr) tailored 
 What's it do
 ------------
 
-usfxr lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor. 
+usfxr lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor.    
+
+This is achieved by being essentially a tiny synthesizer tailored for making bleeps and bloops suitable for games, it comes with several presets to quickly generate a starting point that can be tweaked further. 
 
 
 Installation
