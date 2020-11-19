@@ -1,6 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
+using Object = UnityEngine.Object;
 
 namespace usfxr {
 	
@@ -33,6 +38,37 @@ namespace usfxr {
 			UpdateSources();
 		}
 
+		/// <summary>
+		/// Call this from any MonoBehaviour to pre-cache all your sfx
+		/// </summary>
+		/// <param name="behaviour">Any of your games MonoBehaviours</param>
+		public static void PreCache(MonoBehaviour behaviour) {
+			var monobehaviourCount = 0;
+			var fieldCount         = 0;
+			
+			var s = new Stopwatch();
+			s.Start();
+
+			foreach (var type in Assembly.GetAssembly(behaviour.GetType()).GetTypes()) {
+				monobehaviourCount++;
+				if (!type.IsClass || type.IsAbstract || !type.IsSubclassOf(typeof(MonoBehaviour))) continue;
+
+				var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
+				var objects = FindObjectsOfType(type);
+				
+				foreach (var obj in objects) {
+					monobehaviourCount++;
+					foreach (var field in fields) {
+						if (field.FieldType != typeof(SfxrParams)) continue;
+						CacheGet((SfxrParams) field.GetValue(obj));
+						fieldCount++;
+					}
+				}
+			}
+			
+			Debug.Log($"Pre cached {fieldCount} sfx found across {monobehaviourCount} components in {s.Elapsed.TotalMilliseconds:F1} ms");
+		}
+
 		void OnValidate() {
 			var audioSources = GetComponents<AudioSource>();
 			var numSources   = audioSources.Length;
@@ -58,17 +94,7 @@ namespace usfxr {
 		public static void Play(SfxrParams param, bool asPreview = false) {
 			Purge();
 
-			if (!cache.TryGetValue(param, out var entry)) {
-				// we can reuse the same renderer, but we need to update the params
-				if (sfxrRenderer == null) sfxrRenderer = new SfxrRenderer();
-				sfxrRenderer.param = param;
-
-				entry = new ClipTimeTuple {
-					clip = sfxrRenderer.GenerateClip(),
-					time = GetTimestamp(),
-				};
-				cache.Add(param, entry);
-			}
+			var entry = CacheGet(param);
 
 			// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
 			if (entry.clip == null) {
@@ -76,6 +102,25 @@ namespace usfxr {
 			}
 
 			PlayClip(entry.clip, asPreview);
+		}
+
+		/// <summary>
+		/// Retrieves an AudioClip along with some other data if it's cached, otherwise it is generated 
+		/// </summary>
+		static ClipTimeTuple CacheGet(SfxrParams param) {
+			if (cache.TryGetValue(param, out var entry)) return entry;
+			
+			// we can reuse the same renderer, but we need to update the params
+			if (sfxrRenderer == null) sfxrRenderer = new SfxrRenderer();
+			sfxrRenderer.param = param;
+
+			entry = new ClipTimeTuple {
+				clip = sfxrRenderer.GenerateClip(),
+				time = GetTimestamp(),
+			};
+			cache.Add(param, entry);
+
+			return entry;
 		}
 
 		static void PlayClip(AudioClip clip, bool asPreview) {
@@ -107,6 +152,9 @@ namespace usfxr {
 			sources = instance.GetComponents<AudioSource>();
 		}
 
+		/// <summary>
+		/// Drops the oldest N sfx from the cache
+		/// </summary>
 		static void Purge() {
 			if (cache.Count < MaxCacheSize) return;
 
