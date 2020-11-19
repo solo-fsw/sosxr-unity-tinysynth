@@ -34,8 +34,8 @@ That's it!
  ------------
  - [ ] Cache sounds before they are played (avoids latency spikes)
  - [ ] Add support for import/export as strings
- - [ ] Add Undo/redo history
  - [ ] Mutations do not work yet
  - [ ] Add locking of parameters when mutating
  - [ ] Improve Editor UI implementation (it's not very good)
+ - [x] Add Undo/redo history
  - [x] Allow for playback of more than one effect at a time
