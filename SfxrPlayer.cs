@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
+
+#if UNITY_EDITOR
 using Debug = UnityEngine.Debug;
-using Object = UnityEngine.Object;
+#endif
 
 namespace usfxr {
 	
@@ -69,9 +71,16 @@ namespace usfxr {
 			Debug.Log($"Pre cached {fieldCount} sfx found across {monobehaviourCount} components in {s.Elapsed.TotalMilliseconds:F1} ms");
 		}
 
+		#if UNITY_EDITOR
 		void OnValidate() {
-			var audioSources = GetComponents<AudioSource>();
-			var numSources   = audioSources.Length;
+			UpdateSources();
+			// make sure we have the correct amount of audio sources
+			// this needs to be done later since unity gets grumpy if we add/remove components in OnValidate
+			if (sources.Length != polyphony) EditorApplication.delayCall += PurgeAndAddSources;
+		}
+
+		void PurgeAndAddSources() {
+			var numSources = sources.Length;
 
 			while (numSources < polyphony) {
 				gameObject.AddComponent<AudioSource>();
@@ -79,12 +88,12 @@ namespace usfxr {
 			}
 			
 			while (numSources > polyphony) {
-				DestroyImmediate(audioSources[numSources - 1]);
+				DestroyImmediate(sources[numSources - 1]);
 				numSources--;
 			}
-
-			UpdateSources();
 		}
+		
+		#endif
 
 		/// <summary>
 		/// Renders and plays the supplied SfxParams
