@@ -8,7 +8,9 @@ namespace usfxr {
 	[CustomPropertyDrawer(typeof(SfxrParams))]
 	public class SfxrParamsEditor : PropertyDrawer {
 		
-		const int RangeScale = 100;
+		const int   RangeScale             = 100;
+		const float ButtonWidth            = 20;
+		const float ButtonMargin           = 5;
 		const float RangeScaleToNormalized = 1f / RangeScale;
 
 		struct ParamData {
@@ -22,30 +24,44 @@ namespace usfxr {
 		bool                                 expandPresets;
 		static FieldInfo[]                   paramFields;
 		static Dictionary<string, ParamData> paramData;
+		float                                height;
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			UpdateReflection();
-			expand = EditorGUILayout.BeginFoldoutHeaderGroup(expand, property.name, null, ShowHeaderContextMenu);
-			if (expand) OnExpandedGUI(property);
-			EditorGUILayout.EndFoldoutHeaderGroup();
+			
+			var startY = position.y;
+			position.height = EditorGUIUtility.singleLineHeight;
+			
+			expand = EditorGUI.BeginFoldoutHeaderGroup(position, expand, property.name, null, ShowHeaderContextMenu);
+			if (expand) OnExpandedGUI(ref position, property);
+			EditorGUI.EndFoldoutHeaderGroup();
+			height = position.y + position.height - startY;
 		}
 
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label) {
-			return base.GetPropertyHeight(property, label) - 19;
+			return height;
 		}
 
-		void OnExpandedGUI(SerializedProperty property) {
+		void OnExpandedGUI(ref Rect position, SerializedProperty property) {
 			EditorGUI.BeginChangeCheck();
 			
-			expandPresets = EditorGUILayout.Foldout(expandPresets, "Presets");
-			if (expandPresets) OnPresetGUI(property);
+			position.y    += EditorGUIUtility.singleLineHeight + 2;
+			expandPresets =  EditorGUI.Foldout(position, expandPresets, "Presets");
+			if (expandPresets) {
+				position.y += EditorGUIUtility.singleLineHeight + 2;
+				OnPresetGUI(position, property);
+				position.y += EditorGUIUtility.singleLineHeight + 2;
+			}
 			
 			foreach (var prop in GetVisibleChildren(property)) {
+				position.y += EditorGUIUtility.singleLineHeight + 2;
+				
 				if (prop.type == "Enum") {
-					WidgetWaveType(prop);
+					WidgetWaveType(position, prop);
 				} else if (prop.type == "float") {
-					WidgetSlider(prop);
+					WidgetSlider(position, prop);
 				}
+
 			}
 			
 			if (!EditorGUI.EndChangeCheck()) return;
@@ -54,39 +70,51 @@ namespace usfxr {
 			PlayPreview(property);
 		}
 
-		static void WidgetSlider(SerializedProperty property) {
+		static void WidgetSlider(Rect position, SerializedProperty property) {
 			if (!paramData.TryGetValue(property.name, out var data)) return;
 			
 			var label = new GUIContent(property.displayName, data.tooltip);
 
-			EditorGUILayout.BeginHorizontal();
-			property.floatValue = EditorGUILayout.IntSlider(label,
+			var sliderPosition = new Rect(position);
+			sliderPosition.width -= ButtonWidth + ButtonMargin;
+			
+			property.floatValue = EditorGUI.IntSlider(
+				sliderPosition, 
+				label,
 				Mathf.RoundToInt(property.floatValue * RangeScale),
 				data.min,
 				data.max) * RangeScaleToNormalized;
 
-			if (GUILayout.Button(new GUIContent("R", "Reset this parameter to its default value"),
-				GUILayout.Width(20))) {
+			var buttonPosition = new Rect(position) { x = position.x + position.width - ButtonWidth, width = ButtonWidth };
+
+			if (GUI.Button(buttonPosition, new GUIContent("R", "Reset this parameter to its default value"))) {
 				property.floatValue = data.@default * RangeScaleToNormalized;
 			}
-			
-			EditorGUILayout.EndHorizontal();
 		}
 
-		static void WidgetWaveType(SerializedProperty property) {
-			EditorGUILayout.PropertyField(property);
+		static void WidgetWaveType(Rect position, SerializedProperty property) {
+			EditorGUI.PropertyField(position, property);
 		}
 
-		static void OnPresetGUI(SerializedProperty property) {
-			EditorGUILayout.BeginHorizontal();
-			if (GUILayout.Button("LASER/SHOOT")) SetParam(property, SfxrPreset.LaserShoot());
-			if (GUILayout.Button("PICKUP/COIN")) SetParam(property, SfxrPreset.PickupCoin());
-			if (GUILayout.Button("EXPLOSION")) SetParam(property, SfxrPreset.Explosion());
-			if (GUILayout.Button("POWER UP")) SetParam(property, SfxrPreset.PowerUp());
-			if (GUILayout.Button("HIT/HURT")) SetParam(property, SfxrPreset.HitHurt());
-			if (GUILayout.Button("JUMP")) SetParam(property, SfxrPreset.Jump());
-			if (GUILayout.Button("BLIP/SELECT")) SetParam(property, SfxrPreset.BlipSelect());
-			EditorGUILayout.EndHorizontal();
+		static void OnPresetGUI(Rect position, SerializedProperty property) {
+			var rect = new Rect(position) {
+				width = (position.width + ButtonMargin) / 7 - ButtonMargin,
+				height = EditorGUIUtility.singleLineHeight * 2,
+			};
+
+			if (PresetButton(ref rect,"LASER\nSHOOT")) SetParam(property, SfxrPreset.LaserShoot());
+			if (PresetButton(ref rect,"PICKUP\nCOIN")) SetParam(property, SfxrPreset.PickupCoin());
+			if (PresetButton(ref rect,"EXPLOSION")) SetParam(property, SfxrPreset.Explosion());
+			if (PresetButton(ref rect,"POWER UP")) SetParam(property, SfxrPreset.PowerUp());
+			if (PresetButton(ref rect,"HIT\nHURT")) SetParam(property, SfxrPreset.HitHurt());
+			if (PresetButton(ref rect,"JUMP")) SetParam(property, SfxrPreset.Jump());
+			if (PresetButton(ref rect,"BLIP\nSELECT")) SetParam(property, SfxrPreset.BlipSelect());
+		}
+
+		static bool PresetButton(ref Rect position, string label) {
+			var pressed = GUI.Button(position, label);
+			position.x += position.width + ButtonMargin;
+			return pressed;
 		}
 
 		static void ShowHeaderContextMenu(Rect position) {
