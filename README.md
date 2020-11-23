@@ -1,14 +1,14 @@
-﻿# usfxr
+﻿![usfxr](github~/usfxr.jpg?raw=true "usfxr")
 
 This project is a reimagining of [usfxr](https://github.com/zeh/usfxr) tailored for my own prototyping needs. 
 
 What's it do
 ------------
+<img align="right" width="100" height="100" src="github~/screenshot.gif">
 
-usfxr lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor.    
+usfxr lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor.
 
 This is achieved by being essentially a tiny synthesizer tailored for making bleeps and bloops suitable for games, it comes with several presets to quickly generate a starting point that can be tweaked further. 
-
 
 Installation
 ------------
