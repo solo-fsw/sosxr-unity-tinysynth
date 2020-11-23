@@ -14,11 +14,12 @@ namespace usfxr {
 		const float ButtonMargin           = 5;
 		const float RangeScaleToNormalized = 1f / RangeScale;
 
-		struct ParamData {
+		class ParamData {
 			public int    min;
 			public int    max;
 			public int    @default;
 			public string tooltip;
+			public bool   locked;
 		}
 		
 		bool                                 expand;
@@ -26,6 +27,8 @@ namespace usfxr {
 		static FieldInfo[]                   paramFields;
 		static Dictionary<string, ParamData> paramData;
 		float                                height;
+		
+		static readonly GUIStyle lockButtonStyle = "IN LockButton";
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			UpdateReflection();
@@ -77,7 +80,7 @@ namespace usfxr {
 			var label = new GUIContent(property.displayName, data.tooltip);
 
 			var sliderPosition = new Rect(position);
-			sliderPosition.width -= ButtonWidth + ButtonMargin;
+			sliderPosition.width -= (ButtonWidth + ButtonMargin) * 2;
 			
 			property.floatValue = EditorGUI.IntSlider(
 				sliderPosition, 
@@ -86,15 +89,31 @@ namespace usfxr {
 				data.min,
 				data.max) * RangeScaleToNormalized;
 
-			var buttonPosition = new Rect(position) { x = position.x + position.width - ButtonWidth, width = ButtonWidth };
+			ExtraButtons(position, property);
+		}
 
+		static void ExtraButtons(Rect position, SerializedProperty property) {
+			if (!paramData.TryGetValue(property.name, out var data)) return;
+			
+			var buttonPosition = new Rect(position) { x = position.x + position.width - ButtonWidth * 2 - ButtonMargin, width = ButtonWidth };
 			if (GUI.Button(buttonPosition, new GUIContent("R", "Reset this parameter to its default value"))) {
-				property.floatValue = data.@default * RangeScaleToNormalized;
+				
+				if (property.type == "Enum") {
+					property.enumValueIndex = Mathf.FloorToInt(data.@default* RangeScaleToNormalized);
+				} else if (property.type == "float") {
+					property.floatValue = data.@default * RangeScaleToNormalized;					
+				}
 			}
+			
+			buttonPosition.x = position.x + position.width - ButtonWidth;
+			data.locked = GUI.Toggle(buttonPosition, data.locked, new GUIContent("", "Lock this parameter from changes via templates/mutation"), lockButtonStyle);
 		}
 
 		static void WidgetWaveType(Rect position, SerializedProperty property) {
-			EditorGUI.PropertyField(position, property);
+			var wavePickerPos = new Rect(position);
+			wavePickerPos.width -= (ButtonWidth + ButtonMargin) * 2;
+			EditorGUI.PropertyField(wavePickerPos, property);
+			ExtraButtons(position, property);
 		}
 
 		static void OnPresetGUI(Rect position, SerializedProperty property) {
@@ -159,6 +178,7 @@ namespace usfxr {
 			foreach (var field in paramFields) {
 				// find the corresponding property
 				var prop = property.FindPropertyRelative(field.Name);
+				if (paramData[field.Name].locked) continue;
 				
 				// apply the value from the SfxrParams struct to the SerializedProperty
 				// only enums and floats for now, add more as needed

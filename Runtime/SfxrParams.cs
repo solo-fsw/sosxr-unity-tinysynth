@@ -19,7 +19,7 @@ namespace usfxr {
 	public struct SfxrParams {
 		/// Shape of wave to generate
 		[Tooltip("Shape of wave to generate")] 
-		[SfxrDefault(1)] [SerializeField] public WaveType waveType;
+		[SfxrDefault(2)] [SerializeField] public WaveType waveType;
 
 		/// Overall volume of the sound (0 to 1)
 		[Tooltip("Overall volume of the sound")]

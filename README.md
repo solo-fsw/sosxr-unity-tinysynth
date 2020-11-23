@@ -42,7 +42,7 @@ Installation
  ------------
  - [ ] Add support for import/export as strings
  - [ ] Mutations do not work yet
- - [ ] Add locking of parameters when mutating
+ - [x] Add locking of parameters when mutating
  - [ ] Improve Editor UI implementation (it's not very good)
  - [x] Cache sounds before they are played (avoids latency spikes)
  - [x] Add Undo/redo history
