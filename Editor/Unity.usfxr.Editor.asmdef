@@ -1,5 +1,5 @@
 {
-    "name": "usfxrEditor",
+    "name": "Unity.usfxr.Editor",
     "references": [
         "GUID:15cb2139f321d4546a736769db911ebf"
     ],
