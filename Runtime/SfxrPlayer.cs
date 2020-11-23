@@ -101,15 +101,13 @@ namespace usfxr {
 		/// <param name="param">The sound effect parameters to use</param>
 		/// <param name="asPreview">If set, the effect will always play on the first channel (this stops any previous preview that is still playing)</param>
 		public static void Play(SfxrParams param, bool asPreview = false) {
-			Purge();
-
+			PurgeCache();
+			
 			var entry = CacheGet(param);
-
+			
 			// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
-			if (entry.clip == null) {
-				entry.clip = sfxrRenderer.GenerateClip();
-			}
-
+			if (entry.clip == null) entry.clip = sfxrRenderer.GenerateClip();
+			
 			PlayClip(entry.clip, asPreview);
 		}
 
@@ -136,12 +134,13 @@ namespace usfxr {
 			UpdateInstance();
 
 			if (sources == null) UpdateSources();
-			if (sources.Length == 0) {
+			if (sources == null || sources.Length == 0) {
 				Debug.LogError($"No {nameof(AudioSource)} found in on GameObject that has {nameof(SfxrPlayer)}. Add one!");
 				return;
 			}
 
 			if (asPreview) {
+				sources[0].Stop();
 				sources[0].PlayOneShot(clip);
 			} else {
 				sources[sourceIndex].PlayOneShot(clip);
@@ -164,7 +163,7 @@ namespace usfxr {
 		/// <summary>
 		/// Drops the oldest N sfx from the cache
 		/// </summary>
-		static void Purge() {
+		static void PurgeCache() {
 			if (cache.Count < MaxCacheSize) return;
 
 			var now    = GetTimestamp();
