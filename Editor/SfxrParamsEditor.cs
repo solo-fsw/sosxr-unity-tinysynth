@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace usfxr {
 			var startY = position.y;
 			position.height = EditorGUIUtility.singleLineHeight;
 			
-			expand = EditorGUI.BeginFoldoutHeaderGroup(position, expand, property.name, null, ShowHeaderContextMenu);
+			expand = EditorGUI.BeginFoldoutHeaderGroup(position, expand, property.name, null, rect => ShowHeaderContextMenu(rect, property));
 			if (expand) OnExpandedGUI(ref position, property);
 			EditorGUI.EndFoldoutHeaderGroup();
 			height = position.y + position.height - startY;
@@ -117,16 +118,19 @@ namespace usfxr {
 			return pressed;
 		}
 
-		static void ShowHeaderContextMenu(Rect position) {
+		static void ShowHeaderContextMenu(Rect position, SerializedProperty property) {
 			var menu = new GenericMenu();
-			menu.AddItem(new GUIContent("This is a placeholder menu for export and import things"), false, OnItemClicked);
+			menu.AddItem(new GUIContent("Export WAV"), false, () => OnExportWav(property));
 			menu.DropDown(position);
 		}
 
-		static void OnItemClicked() {
-			Debug.Log("Sorry, it doesn't work yet :(");
+		static void OnExportWav(SerializedProperty property) {
+			var path = EditorUtility.SaveFilePanel("Export as WAV", "", property.name + ".wav", "wav");
+			if (path.Length == 0) return;
+			var synth = new SfxrRenderer { param = PropertyToParams(property) };
+			File.WriteAllBytes(path, synth.GetWavFile());
 		}
-		
+
 		/// <summary>
 		/// Gets visible children of `SerializedProperty` at 1 level depth.
 		/// </summary>
@@ -195,10 +199,14 @@ namespace usfxr {
 		}
 
 		static void PlayPreview(SerializedProperty property) {
+			SfxrPlayer.Play(PropertyToParams(property), true);
+		}
+
+		static SfxrParams PropertyToParams(SerializedProperty property) {
 			var target = property.serializedObject.targetObject;
 			var type   = target.GetType();
 			var field  = type.GetField(property.name);
-			SfxrPlayer.Play((SfxrParams) field.GetValue(target), true);
+			return (SfxrParams) field.GetValue(target);
 		}
 	}
 }
