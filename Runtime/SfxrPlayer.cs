@@ -4,10 +4,7 @@ using System.Diagnostics;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-
-#if UNITY_EDITOR
 using Debug = UnityEngine.Debug;
-#endif
 
 namespace usfxr {
 	
