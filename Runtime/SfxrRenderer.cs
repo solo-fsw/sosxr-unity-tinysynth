@@ -118,9 +118,10 @@ namespace usfxr {
 		/// <summary>
 		/// Synchronously generates a Unity AudioClip
 		/// </summary>
-		public AudioClip GenerateClip() {
+		public AudioClip GenerateClip(SfxrParams param) {
 			// var s = new Stopwatch();
 			// s.Start();
+			this.param = param;
 			Reset(true);
 		
 			var clip = AudioClip.Create("usfxr", (int) envelopeFullLength, 1, 44100, false);

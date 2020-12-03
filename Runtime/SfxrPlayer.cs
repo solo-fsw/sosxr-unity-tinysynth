@@ -101,10 +101,6 @@ namespace usfxr {
 			PurgeCache();
 			
 			var entry = CacheGet(param);
-			
-			// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
-			if (entry.clip == null) entry.clip = sfxrRenderer.GenerateClip();
-			
 			PlayClip(entry.clip, asPreview);
 		}
 
@@ -112,14 +108,17 @@ namespace usfxr {
 		/// Retrieves an AudioClip along with some other data if it's cached, otherwise it is generated 
 		/// </summary>
 		static ClipTimeTuple CacheGet(SfxrParams param) {
-			if (cache.TryGetValue(param, out var entry)) return entry;
-			
-			// we can reuse the same renderer, but we need to update the params
+			// make sure we have a renderer
 			if (sfxrRenderer == null) sfxrRenderer = new SfxrRenderer();
-			sfxrRenderer.param = param;
+			
+			if (cache.TryGetValue(param, out var entry)) {
+				// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
+				if (entry.clip == null) entry.clip = sfxrRenderer.GenerateClip(param);
+				return entry;
+			}
 
 			entry = new ClipTimeTuple {
-				clip = sfxrRenderer.GenerateClip(),
+				clip = sfxrRenderer.GenerateClip(param),
 				time = GetTimestamp(),
 			};
 			cache.Add(param, entry);
