@@ -13,7 +13,8 @@ namespace usfxr {
 		const float ButtonWidth            = 20;
 		const float ButtonMargin           = 5;
 		const float RangeScaleToNormalized = 1f / RangeScale;
-
+		const float Margin                 = 2;
+		
 		class ParamData {
 			public int    min;
 			public int    max;
@@ -21,14 +22,16 @@ namespace usfxr {
 			public string tooltip;
 			public bool   locked;
 		}
+
+		bool  expand;
+		bool  expandPresets;
+		float height;
 		
-		bool                                 expand;
-		bool                                 expandPresets;
 		static FieldInfo[]                   paramFields;
 		static Dictionary<string, ParamData> paramData;
-		float                                height;
 		
 		static readonly GUIStyle lockButtonStyle = "IN LockButton";
+		static readonly Color    curveColor      = new Color(1.0f, 140.0f / 255.0f, 0.0f, 1.0f);
 
 		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label) {
 			UpdateReflection();
@@ -47,25 +50,35 @@ namespace usfxr {
 		}
 
 		void OnExpandedGUI(ref Rect position, SerializedProperty property) {
+			position.y    += EditorGUIUtility.singleLineHeight + Margin;
+			var previewRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight * 5);
+			
+			// stick a button behind the preview so we can click it to play
+			if (GUI.Button(previewRect, "play")) PlayPreview(property);
+			
+			// don't render the preview if it's tiny
+			if (previewRect.width > 1) DoRenderPreview(SfxrPlayer.GetClip(PropertyToParams(property)), previewRect);
+			
+			position.y += previewRect.height + Margin;
+			
+			expandPresets =  EditorGUI.Foldout(position, expandPresets, "Presets");
+			// the change check needs to go after the foldout, if not it'll trigger a preview on open/close
 			EditorGUI.BeginChangeCheck();
 			
-			position.y    += EditorGUIUtility.singleLineHeight + 2;
-			expandPresets =  EditorGUI.Foldout(position, expandPresets, "Presets");
 			if (expandPresets) {
-				position.y += EditorGUIUtility.singleLineHeight + 2;
+				position.y += EditorGUIUtility.singleLineHeight + Margin;
 				OnPresetGUI(position, property);
-				position.y += EditorGUIUtility.singleLineHeight + 2;
+				position.y += EditorGUIUtility.singleLineHeight + Margin;
 			}
 			
 			foreach (var prop in GetVisibleChildren(property)) {
-				position.y += EditorGUIUtility.singleLineHeight + 2;
-				
+				position.y += EditorGUIUtility.singleLineHeight + Margin;
+			
 				if (prop.type == "Enum") {
 					WidgetWaveType(position, prop);
 				} else if (prop.type == "float") {
 					WidgetSlider(position, prop);
 				}
-
 			}
 			
 			if (!EditorGUI.EndChangeCheck()) return;
@@ -227,6 +240,23 @@ namespace usfxr {
 			var type   = target.GetType();
 			var field  = type.GetField(property.name);
 			return (SfxrParams) field.GetValue(target);
+		}
+
+		static void DoRenderPreview(AudioClip clip, Rect rect) {
+			var samples = new float[clip.samples];
+			clip.GetData(samples, 0);
+
+			AudioCurveRendering.AudioCurveAndColorEvaluator dlg =
+				delegate(float x, out Color color) {
+					color = curveColor;
+					if (clip.samples <= 0) return 0;
+					var p =  Mathf.FloorToInt(Mathf.Clamp(x * (clip.samples - 1), 0.0f, clip.samples - 1));
+					return samples[p];
+				};
+
+			rect = AudioCurveRendering.BeginCurveFrame(rect);
+			AudioCurveRendering.DrawSymmetricFilledCurve(rect, dlg);
+			AudioCurveRendering.EndCurveFrame();
 		}
 	}
 }

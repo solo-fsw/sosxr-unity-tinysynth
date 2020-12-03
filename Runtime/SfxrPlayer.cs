@@ -126,6 +126,10 @@ namespace usfxr {
 			return entry;
 		}
 
+		public static AudioClip GetClip(SfxrParams param) {
+			return CacheGet(param).clip;
+		}
+
 		static void PlayClip(AudioClip clip, bool asPreview) {
 			UpdateInstance();
 
