@@ -40,10 +40,10 @@ Installation
     
  Todo
  ------------
- - [ ] Add support for import/export as strings
+ - [ ] Figure out a way to hide parameters that do nothing for the current configuration (ie duty cycle for non square waves)
  - [ ] Mutations do not work yet
  - [x] Add locking of parameters when mutating
- - [ ] Improve Editor UI implementation (it's not very good)
+ - [x] Improve Editor UI implementation (it's not very good)
  - [x] Cache sounds before they are played (avoids latency spikes)
  - [x] Add Undo/redo history
  - [x] Allow for playback of more than one effect at a time
