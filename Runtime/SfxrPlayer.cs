@@ -17,7 +17,7 @@ namespace usfxr {
 		class ClipTimeTuple {
 			
 			public AudioClip clip;
-			public long      triggerTime { get; private set; }
+			public float     triggerTime { get; private set; }
 			public bool      firstPlay = true;
 
 			public float timeSinceLastTrigger => GetTimestamp() - triggerTime;
@@ -118,7 +118,9 @@ namespace usfxr {
 			UpdateInstance();
 			
 			var entry = CacheGet(param);
-			if (!entry.firstPlay && !asPreview && entry.timeSinceLastTrigger < instance.minRetriggerTime) return;
+			if (!entry.firstPlay && !asPreview && entry.timeSinceLastTrigger < instance.minRetriggerTime) {
+				return;
+			}
 			
 			entry.UpdateTime();
 			PlayClip(entry.clip, asPreview);
@@ -185,7 +187,7 @@ namespace usfxr {
 			if (cache.Count < MaxCacheSize) return;
 
 			var now    = GetTimestamp();
-			var maxAge = long.MinValue;
+			var maxAge = float.MinValue;
 			var oldest = new SfxrParams();
 
 			foreach (var entry in cache) {
@@ -198,8 +200,8 @@ namespace usfxr {
 			cache.Remove(oldest);
 		}
 		
-		static long GetTimestamp() {
-			return DateTimeOffset.Now.ToUnixTimeSeconds();
+		static float GetTimestamp() {
+			return Time.unscaledTime;
 		}
 	}
 }
