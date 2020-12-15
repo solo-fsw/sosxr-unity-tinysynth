@@ -15,8 +15,20 @@ namespace usfxr {
 	[RequireComponent(typeof(AudioSource))]
 	public class SfxrPlayer : MonoBehaviour {
 		class ClipTimeTuple {
+			
 			public AudioClip clip;
-			public long      time;
+			public long      triggerTime { get; private set; }
+			public bool      firstPlay = true;
+
+			public float timeSinceLastTrigger => GetTimestamp() - triggerTime;
+
+			public ClipTimeTuple(AudioClip clip) {
+				this.clip = clip;
+			}
+
+			public void UpdateTime() {
+				triggerTime = GetTimestamp();
+			}
 		}
 
 		static readonly Dictionary<SfxrParams, ClipTimeTuple> cache = new Dictionary<SfxrParams, ClipTimeTuple>();
@@ -29,6 +41,10 @@ namespace usfxr {
 		[Header("A higher polyphony means you can play more sound effects simultaneously.")]
 		[Range(1, 16)]
 		public int polyphony = 1;
+
+		[Header("Minimum duration (seconds) before allowing to play the same sfx again.")]
+		[Range(0, .5f)]
+		public float minRetriggerTime = .017f;
 
 		const int MaxCacheSize = 32;
 
@@ -99,8 +115,12 @@ namespace usfxr {
 		/// <param name="asPreview">If set, the effect will always play on the first channel (this stops any previous preview that is still playing)</param>
 		public static void Play(SfxrParams param, bool asPreview = false) {
 			PurgeCache();
+			UpdateInstance();
 			
 			var entry = CacheGet(param);
+			if (!entry.firstPlay && !asPreview && entry.timeSinceLastTrigger < instance.minRetriggerTime) return;
+			
+			entry.UpdateTime();
 			PlayClip(entry.clip, asPreview);
 		}
 
@@ -114,13 +134,11 @@ namespace usfxr {
 			if (cache.TryGetValue(param, out var entry)) {
 				// sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
 				if (entry.clip == null) entry.clip = sfxrRenderer.GenerateClip(param);
+				entry.firstPlay = false;
 				return entry;
 			}
 
-			entry = new ClipTimeTuple {
-				clip = sfxrRenderer.GenerateClip(param),
-				time = GetTimestamp(),
-			};
+			entry = new ClipTimeTuple(sfxrRenderer.GenerateClip(param));
 			cache.Add(param, entry);
 
 			return entry;
@@ -171,7 +189,7 @@ namespace usfxr {
 			var oldest = new SfxrParams();
 
 			foreach (var entry in cache) {
-				var age = now - entry.Value.time;
+				var age = now - entry.Value.triggerTime;
 				if (age < maxAge) continue;
 				maxAge = age;
 				oldest = entry.Key;
@@ -179,7 +197,7 @@ namespace usfxr {
 
 			cache.Remove(oldest);
 		}
-
+		
 		static long GetTimestamp() {
 			return DateTimeOffset.Now.ToUnixTimeSeconds();
 		}
