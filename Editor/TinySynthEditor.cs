@@ -237,7 +237,7 @@ namespace usfxr
                 return;
             }
 
-            var synth = new SfxrRenderer {param = PropertyToParams(property)};
+            var synth = new TinySynthRenderer {param = PropertyToParams(property)};
             File.WriteAllBytes(path, synth.GetWavFile());
         }
 

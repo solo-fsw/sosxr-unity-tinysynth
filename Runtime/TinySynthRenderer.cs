@@ -5,10 +5,10 @@ using Random = System.Random;
 
 namespace usfxr
 {
-	/// <summary>
-	///     Renders audio in preparation for playing
-	/// </summary>
-	public class SfxrRenderer
+    /// <summary>
+    ///     Renders audio in preparation for playing
+    /// </summary>
+    public class TinySynthRenderer
     {
         public TinySynthSound param;
 
@@ -911,11 +911,11 @@ namespace usfxr
     }
 
 
-	/// <summary>
-	///     From BFXR
-	///     Class taken from http: //www.firstpr.com.au/dsp/pink-noise/#Filtering
-	/// </summary>
-	internal class PinkNumber
+    /// <summary>
+    ///     From BFXR
+    ///     Class taken from http: //www.firstpr.com.au/dsp/pink-noise/#Filtering
+    /// </summary>
+    internal class PinkNumber
     {
         // Properties
         private readonly int maxKey;

@@ -2,7 +2,7 @@ using UnityEngine;
 using usfxr;
 
 
-public class USFXR_Demo : MonoBehaviour
+public class TinySynth_Demo : MonoBehaviour
 {
     [SerializeField] private TinySynthSound m_sound;
 

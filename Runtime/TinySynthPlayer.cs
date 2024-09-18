@@ -8,10 +8,10 @@ using Debug = UnityEngine.Debug;
 
 namespace usfxr
 {
-	/// <summary>
-	///     This is the script responsible for providing rendered audio to the engine, it also handles caching
-	/// </summary>
-	[RequireComponent(typeof(AudioSource))]
+    /// <summary>
+    ///     This is the script responsible for providing rendered audio to the engine, it also handles caching
+    /// </summary>
+    [RequireComponent(typeof(AudioSource))]
     public class TinySynthPlayer : MonoBehaviour
     {
         [Header("A higher polyphony means you can play more sound effects simultaneously.")]
@@ -25,7 +25,7 @@ namespace usfxr
         private static readonly Dictionary<TinySynthSound, ClipTimeTuple> cache = new();
 
         private static TinySynthPlayer instance;
-        private static SfxrRenderer sfxrRenderer;
+        private static TinySynthRenderer _tinySynthRenderer;
         private static AudioSource[] sources;
         private static int sourceIndex;
 
@@ -115,9 +115,9 @@ namespace usfxr
         private static ClipTimeTuple CacheGet(TinySynthSound param)
         {
             // make sure we have a renderer
-            if (sfxrRenderer == null)
+            if (_tinySynthRenderer == null)
             {
-                sfxrRenderer = new SfxrRenderer();
+                _tinySynthRenderer = new TinySynthRenderer();
             }
 
             if (cache.TryGetValue(param, out var entry))
@@ -125,7 +125,7 @@ namespace usfxr
                 // sometimes it seems the audio clip will get lost despite the cache having a reference to it, so we may need to regenerate it
                 if (entry.clip == null)
                 {
-                    entry.clip = sfxrRenderer.GenerateClip(param);
+                    entry.clip = _tinySynthRenderer.GenerateClip(param);
                 }
 
                 entry.firstPlay = false;
@@ -133,7 +133,7 @@ namespace usfxr
                 return entry;
             }
 
-            entry = new ClipTimeTuple(sfxrRenderer.GenerateClip(param));
+            entry = new ClipTimeTuple(_tinySynthRenderer.GenerateClip(param));
             cache.Add(param, entry);
 
             return entry;

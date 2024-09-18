@@ -1,9 +1,9 @@
 ﻿namespace usfxr
 {
-	/// <summary>
-	///     Defines the wave shape used by the synthesiser
-	/// </summary>
-	public enum TinySynthWaveType : uint
+    /// <summary>
+    ///     Defines the wave shape used by the synthesiser
+    /// </summary>
+    public enum TinySynthWaveType : uint
     {
         Square = 0,
         Sawtooth = 1,

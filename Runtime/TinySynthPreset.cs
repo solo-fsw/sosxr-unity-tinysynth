@@ -2,10 +2,10 @@
 {
     public static class TinySynthPreset
     {
-	    /// <summary>
-	    ///     Sets the parameters to generate a pickup/coin sound
-	    /// </summary>
-	    public static TinySynthSound PickupCoin()
+        /// <summary>
+        ///     Sets the parameters to generate a pickup/coin sound
+        /// </summary>
+        public static TinySynthSound PickupCoin()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -28,10 +28,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate a laser/shoot sound
-	    /// </summary>
-	    public static TinySynthSound LaserShoot()
+        /// <summary>
+        ///     Sets the parameters to generate a laser/shoot sound
+        /// </summary>
+        public static TinySynthSound LaserShoot()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -94,10 +94,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate an explosion sound
-	    /// </summary>
-	    public static TinySynthSound Explosion()
+        /// <summary>
+        ///     Sets the parameters to generate an explosion sound
+        /// </summary>
+        public static TinySynthSound Explosion()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -147,10 +147,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate a powerup sound
-	    /// </summary>
-	    public static TinySynthSound PowerUp()
+        /// <summary>
+        ///     Sets the parameters to generate a powerup sound
+        /// </summary>
+        public static TinySynthSound PowerUp()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -189,10 +189,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate a hit/hurt sound
-	    /// </summary>
-	    public static TinySynthSound HitHurt()
+        /// <summary>
+        ///     Sets the parameters to generate a hit/hurt sound
+        /// </summary>
+        public static TinySynthSound HitHurt()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -223,10 +223,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate a jump sound
-	    /// </summary>
-	    public static TinySynthSound Jump()
+        /// <summary>
+        ///     Sets the parameters to generate a jump sound
+        /// </summary>
+        public static TinySynthSound Jump()
         {
             var p = new TinySynthSound();
             p.Reset();
@@ -253,10 +253,10 @@
         }
 
 
-	    /// <summary>
-	    ///     Sets the parameters to generate a blip/select sound
-	    /// </summary>
-	    public static TinySynthSound BlipSelect()
+        /// <summary>
+        ///     Sets the parameters to generate a blip/select sound
+        /// </summary>
+        public static TinySynthSound BlipSelect()
         {
             var p = new TinySynthSound();
             p.Reset();
