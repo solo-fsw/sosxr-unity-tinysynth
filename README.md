@@ -2,25 +2,26 @@
 
 <img align="right" width="200" height="150" src="github~/screenshot.gif">
 
-usfxr lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor.
+TinySynth is a direct fork of [usfxr](https://github.com/grapefrukt/usfxr). I had to rename it because I couldn't remember how to spell usfxr.
+
+TinySynth lets you quickly generate placeholder (or permanent, I don't judge) sound effects right inside the Unity editor.
 
 This is achieved by being essentially a tiny synthesizer tailored for making bleeps and bloops suitable for games, it comes with several presets to quickly generate a starting point that can be tweaked further.
 
-This project is a reimagining of [usfxr](https://github.com/zeh/usfxr) tailored for my own prototyping needs. 
 
  Usage
  ------------
- Add a the `SfxrPlayer` component to an object in your scene, the main camera is a good spot to put it. 
+ Add a the `TinySynthPlayer` component to an object in your scene, the main camera is a good spot to put it. 
  
- Now, in any MonoBehaviour you wish to play a sound effect, add a public `SfxrParams` field:
+ Now, in any MonoBehaviour you wish to play a sound effect, add a public `TinySynthSound` field:
     
-	public SfxrParams sfxJump;
+	public TinySynthSound sfxJump;
 
 This will now get a nice property drawer in the editor where you can tweak its properties or apply any of the provided presets. 
 
-To play this sound effect, call the static function on `SfxrPlayer`:
+To play this sound effect, call the static function on `TinySynthPlayer`:
 
-    SfxrPlayer.Play(sfxJump);
+    TinySynthPlayer.Play(sfxJump);
     
 That's it!
 
@@ -29,7 +30,7 @@ That's it!
  
  It takes a few milliseconds to generate a sound effect, to keep things snappy they are cached once generated. If you wish to pre-cache your effects call:
  
-    SfxrPlayer.PreCache(this);
+    TinySynthPlayer.PreCache(this);
     
 This can be done from any MonoBehaviour and will cache all effects across every behaviour despite only taking a reference to one.
 
