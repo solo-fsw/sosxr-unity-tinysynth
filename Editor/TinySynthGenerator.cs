@@ -21,7 +21,6 @@
 //-----------------------------------------------------------------------
 
 
-
 /// <summary>
 /// Implements a Unity window to generate sounds and their parameters with usfxr.
 /// </summary>
@@ -329,3 +328,4 @@
     }
 }
 */
+

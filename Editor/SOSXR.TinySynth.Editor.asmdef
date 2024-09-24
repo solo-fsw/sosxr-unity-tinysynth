@@ -1,18 +1,18 @@
 {
-    "name": "SOSXR.TinySynth.Editor",
-    "rootNamespace": "",
-    "references": [
-        "GUID:62dcf6391aa6d49f9ba3570ecd2ba628"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "SOSXR.TinySynth.Editor",
+  "rootNamespace": "",
+  "references": [
+    "GUID:62dcf6391aa6d49f9ba3570ecd2ba628"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }
