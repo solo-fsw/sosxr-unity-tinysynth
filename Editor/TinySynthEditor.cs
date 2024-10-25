@@ -6,14 +6,14 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace usfxr
+namespace SOSXR.TinySynth
 {
     [CustomPropertyDrawer(typeof(TinySynthSound))]
     public class TinySynthEditor : PropertyDrawer
     {
-        private bool expand = true;
-        private bool expandPresets;
-        private float height;
+        private bool _expand = true;
+        private bool _expandPresets;
+        private float _height;
 
         private const int RangeScale = 100;
         private const float ButtonWidth = 20;
@@ -21,11 +21,11 @@ namespace usfxr
         private const float RangeScaleToNormalized = 1f / RangeScale;
         private const float Margin = 2;
 
-        private static FieldInfo[] paramFields;
-        private static Dictionary<string, ParamData> paramData;
+        private static FieldInfo[] _paramFields;
+        private static Dictionary<string, ParamData> _paramData;
 
-        private static readonly GUIStyle lockButtonStyle = "IN LockButton";
-        private static readonly Color curveColor = new(1.0f, 140.0f / 255.0f, 0.0f, 1.0f);
+        private static readonly GUIStyle LockButtonStyle = "IN LockButton";
+        private static readonly Color CurveColor = new(1.0f, 140.0f / 255.0f, 0.0f, 1.0f);
 
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -35,21 +35,21 @@ namespace usfxr
             var startY = position.y;
             position.height = EditorGUIUtility.singleLineHeight;
 
-            expand = EditorGUI.BeginFoldoutHeaderGroup(position, expand, property.name, null, rect => ShowHeaderContextMenu(rect, property));
+            _expand = EditorGUI.BeginFoldoutHeaderGroup(position, _expand, property.name, null, rect => ShowHeaderContextMenu(rect, property));
 
-            if (expand)
+            if (_expand)
             {
                 OnExpandedGUI(ref position, property);
             }
 
             EditorGUI.EndFoldoutHeaderGroup();
-            height = position.y + position.height - startY;
+            _height = position.y + position.height - startY;
         }
 
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            return height;
+            return _height;
         }
 
 
@@ -59,7 +59,7 @@ namespace usfxr
             var previewRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight * 5);
 
             // stick a button behind the preview so we can click it to play
-            if (GUI.Button(previewRect, "play"))
+            if (GUI.Button(previewRect, "Play"))
             {
                 PlayPreview(property);
             }
@@ -72,11 +72,11 @@ namespace usfxr
 
             position.y += previewRect.height + Margin;
 
-            expandPresets = EditorGUI.Foldout(position, expandPresets, "Presets");
+            _expandPresets = EditorGUI.Foldout(position, _expandPresets, "Presets");
             // the change check needs to go after the foldout, if not it'll trigger a preview on open/close
             EditorGUI.BeginChangeCheck();
 
-            if (expandPresets)
+            if (_expandPresets)
             {
                 position.y += EditorGUIUtility.singleLineHeight + Margin;
                 OnPresetGUI(position, property);
@@ -110,12 +110,12 @@ namespace usfxr
 
         private static void WidgetSlider(Rect position, SerializedProperty property)
         {
-            if (!paramData.TryGetValue(property.name, out var data))
+            if (!_paramData.TryGetValue(property.name, out var data))
             {
                 return;
             }
 
-            var label = new GUIContent(property.displayName, data.tooltip);
+            var label = new GUIContent(property.displayName, data.Tooltip);
 
             var sliderPosition = new Rect(position);
             sliderPosition.width -= (ButtonWidth + ButtonMargin) * 2;
@@ -124,8 +124,8 @@ namespace usfxr
                 sliderPosition,
                 label,
                 Mathf.RoundToInt(property.floatValue * RangeScale),
-                data.min,
-                data.max) * RangeScaleToNormalized;
+                data.Min,
+                data.Max) * RangeScaleToNormalized;
 
             ExtraButtons(position, property);
         }
@@ -133,7 +133,7 @@ namespace usfxr
 
         private static void ExtraButtons(Rect position, SerializedProperty property)
         {
-            if (!paramData.TryGetValue(property.name, out var data))
+            if (!_paramData.TryGetValue(property.name, out var data))
             {
                 return;
             }
@@ -144,16 +144,16 @@ namespace usfxr
             {
                 if (property.type == "Enum")
                 {
-                    property.enumValueIndex = Mathf.FloorToInt(data.@default * RangeScaleToNormalized);
+                    property.enumValueIndex = Mathf.FloorToInt(data.Default * RangeScaleToNormalized);
                 }
                 else if (property.type == "float")
                 {
-                    property.floatValue = data.@default * RangeScaleToNormalized;
+                    property.floatValue = data.Default * RangeScaleToNormalized;
                 }
             }
 
             buttonPosition.x = position.x + position.width - ButtonWidth;
-            data.locked = GUI.Toggle(buttonPosition, data.locked, new GUIContent("", "Lock this parameter from changes via templates/mutation"), lockButtonStyle);
+            data.Locked = GUI.Toggle(buttonPosition, data.Locked, new GUIContent("", "Lock this parameter from changes via templates/mutation"), LockButtonStyle);
         }
 
 
@@ -277,12 +277,12 @@ namespace usfxr
         private static void SetParam(SerializedProperty property, TinySynthSound param)
         {
             // iterate over all the fields
-            foreach (var field in paramFields)
+            foreach (var field in _paramFields)
             {
                 // find the corresponding property
                 var prop = property.FindPropertyRelative(field.Name);
 
-                if (paramData[field.Name].locked)
+                if (_paramData[field.Name].Locked)
                 {
                     continue;
                 }
@@ -303,38 +303,38 @@ namespace usfxr
 
         private static void UpdateReflection()
         {
-            if (paramFields != null && paramFields.Length > 0)
+            if (_paramFields != null && _paramFields.Length > 0)
             {
                 return;
             }
 
             // cache the fields on SfxrParams, these won't change 
-            paramFields = typeof(TinySynthSound).GetFields(BindingFlags.Public | BindingFlags.Instance);
+            _paramFields = typeof(TinySynthSound).GetFields(BindingFlags.Public | BindingFlags.Instance);
 
             // now we build a little lookup table with the range and default value attributes
-            paramData = new Dictionary<string, ParamData>();
+            _paramData = new Dictionary<string, ParamData>();
 
-            foreach (var field in paramFields)
+            foreach (var field in _paramFields)
             {
-                var data = new ParamData {@default = 0, min = 0, max = 1};
+                var data = new ParamData {Default = 0, Min = 0, Max = 1};
 
                 if (field.GetCustomAttribute(typeof(RangeAttribute)) is RangeAttribute rangeAttribute)
                 {
-                    data.max = Mathf.RoundToInt(rangeAttribute.max * RangeScale);
-                    data.min = Mathf.RoundToInt(rangeAttribute.min * RangeScale);
+                    data.Max = Mathf.RoundToInt(rangeAttribute.max * RangeScale);
+                    data.Min = Mathf.RoundToInt(rangeAttribute.min * RangeScale);
                 }
 
                 if (field.GetCustomAttribute(typeof(TooltipAttribute)) is TooltipAttribute tooltipAttribute)
                 {
-                    data.tooltip = tooltipAttribute.tooltip;
+                    data.Tooltip = tooltipAttribute.tooltip;
                 }
 
-                if (field.GetCustomAttribute(typeof(SfxrDefault)) is SfxrDefault sfxDefault)
+                if (field.GetCustomAttribute(typeof(TinySynthDefaultAttribute)) is TinySynthDefaultAttribute sfxDefault)
                 {
-                    data.@default = Mathf.RoundToInt(sfxDefault.value * RangeScale);
+                    data.Default = Mathf.RoundToInt(sfxDefault.value * RangeScale);
                 }
 
-                paramData.Add(field.Name, data);
+                _paramData.Add(field.Name, data);
             }
         }
 
@@ -370,7 +370,7 @@ namespace usfxr
             AudioCurveRendering.AudioCurveAndColorEvaluator dlg =
                 delegate(float x, out Color color)
                 {
-                    color = curveColor;
+                    color = CurveColor;
 
                     if (clip.samples <= 0)
                     {
@@ -390,11 +390,11 @@ namespace usfxr
 
         private class ParamData
         {
-            public int min;
-            public int max;
-            public int @default;
-            public string tooltip;
-            public bool locked;
+            public int Min;
+            public int Max;
+            public int Default;
+            public string Tooltip;
+            public bool Locked;
         }
     }
 }

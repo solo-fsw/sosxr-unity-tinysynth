@@ -3,7 +3,7 @@ using UnityEngine;
 using Random = System.Random;
 
 
-namespace usfxr
+namespace SOSXR.TinySynth
 {
     /// <summary>
     ///     Renders audio in preparation for playing
@@ -260,7 +260,7 @@ namespace usfxr
             slide = 1.0f - p.slide * p.slide * p.slide * 0.01f;
             deltaSlide = -p.deltaSlide * p.deltaSlide * p.deltaSlide * 0.000001f;
 
-            if (p.m_tinySynthWaveType == 0)
+            if (p.WaveType == 0)
             {
                 squareDuty = 0.5f - p.squareDuty * 0.5f;
                 dutySweep = -p.dutySweep * 0.00005f;
@@ -319,9 +319,9 @@ namespace usfxr
                 return;
             }
 
-            masterVolume = p.masterVolume * p.masterVolume;
+            masterVolume = p.MasterVolume * p.MasterVolume;
 
-            _tinySynthWaveType = p.m_tinySynthWaveType;
+            _tinySynthWaveType = p.WaveType;
 
             if (p.sustainTime < 0.01)
             {

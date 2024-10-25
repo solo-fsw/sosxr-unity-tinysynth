@@ -6,7 +6,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 
 
-namespace usfxr
+namespace SOSXR.TinySynth
 {
     /// <summary>
     ///     This is the script responsible for providing rendered audio to the engine, it also handles caching

@@ -1,4 +1,4 @@
-﻿namespace usfxr
+﻿namespace SOSXR.TinySynth
 {
     /// <summary>
     ///     Defines the wave shape used by the synthesiser

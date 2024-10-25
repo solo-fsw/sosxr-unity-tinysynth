@@ -1,4 +1,4 @@
-﻿namespace usfxr
+﻿namespace SOSXR.TinySynth
 {
     public static class TinySynthPreset
     {
@@ -36,11 +36,11 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.m_tinySynthWaveType = (TinySynthWaveType) (uint) (GetRandom() * 3);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 3);
 
-            if (p.m_tinySynthWaveType == TinySynthWaveType.Sine && GetRandomBool())
+            if (p.WaveType == TinySynthWaveType.Sine && GetRandomBool())
             {
-                p.m_tinySynthWaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
+                p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
             }
 
             p.startFrequency = 0.5f + GetRandom() * 0.5f;
@@ -102,7 +102,7 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.m_tinySynthWaveType = TinySynthWaveType.Noise;
+            p.WaveType = TinySynthWaveType.Noise;
 
             if (GetRandomBool())
             {
@@ -157,7 +157,7 @@
 
             if (GetRandomBool())
             {
-                p.m_tinySynthWaveType = TinySynthWaveType.Sawtooth;
+                p.WaveType = TinySynthWaveType.Sawtooth;
             }
             else
             {
@@ -197,13 +197,13 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.m_tinySynthWaveType = (TinySynthWaveType) (uint) (GetRandom() * 3f);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 3f);
 
-            if (p.m_tinySynthWaveType == TinySynthWaveType.Sine)
+            if (p.WaveType == TinySynthWaveType.Sine)
             {
-                p.m_tinySynthWaveType = TinySynthWaveType.Noise;
+                p.WaveType = TinySynthWaveType.Noise;
             }
-            else if (p.m_tinySynthWaveType == 0)
+            else if (p.WaveType == 0)
             {
                 p.squareDuty = GetRandom() * 0.6f;
             }
@@ -231,7 +231,7 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.m_tinySynthWaveType = 0;
+            p.WaveType = 0;
             p.squareDuty = GetRandom() * 0.6f;
             p.startFrequency = 0.3f + GetRandom() * 0.3f;
             p.slide = 0.1f + GetRandom() * 0.2f;
@@ -261,9 +261,9 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.m_tinySynthWaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
 
-            if (p.m_tinySynthWaveType == 0)
+            if (p.WaveType == 0)
             {
                 p.squareDuty = GetRandom() * 0.6f;
             }
