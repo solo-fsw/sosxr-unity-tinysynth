@@ -1,5 +1,5 @@
-using UnityEngine;
 using SOSXR.TinySynth;
+using UnityEngine;
 
 
 public class TinySynthDemo : MonoBehaviour
