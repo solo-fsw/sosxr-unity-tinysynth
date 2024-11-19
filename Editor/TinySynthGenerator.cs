@@ -42,7 +42,7 @@
     // ================================================================================================================
     // PUBLIC INTERFACE -----------------------------------------------------------------------------------------------
 
-    [MenuItem("Tools/usfxr")]
+    [MenuItem("SOSXR/usfxr")]
     public static SfxrGenerator Initialize() {
         var window = CreateInstance<SfxrGenerator>();
         window.titleContent = new GUIContent("Sound Effects");
