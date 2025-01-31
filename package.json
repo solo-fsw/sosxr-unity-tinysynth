@@ -1,12 +1,17 @@
 {
   "name": "com.grapefrukt.utils.usfxr",
-  "version": "0.0.3",
+  "version": "0.1.3",
   "displayName": "Tiny Synth",
   "description": "quick prototype sound effects",
   "unity": "2019.1",
   "keywords": [
     "audio"
   ],
+  "samples": [ {
+    "displayName": "Samples",
+    "description": "Contains samples of this package",
+    "path": "Samples-/Samples"
+  } ],
   "author": {
     "name": "grapefrukt",
     "url": "https://github.com/grapefrukt/usfxr"
