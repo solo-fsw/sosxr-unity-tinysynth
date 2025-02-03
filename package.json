@@ -15,5 +15,6 @@
   "author": {
     "name": "grapefrukt",
     "url": "https://github.com/grapefrukt/usfxr"
-  }
+  },
+  "changelogUrl": "https://github.com/solo-fsw/sosxr-unity-tinysynth/blob/main/CHANGELOG.md"
 }
