@@ -1,6 +1,6 @@
 {
   "name": "com.grapefrukt.utils.usfxr",
-  "version": "0.1.3",
+  "version": "2.0.0",
   "displayName": "Tiny Synth",
   "description": "quick prototype sound effects",
   "unity": "2019.1",
