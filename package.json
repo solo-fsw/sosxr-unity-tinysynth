@@ -7,11 +7,13 @@
   "keywords": [
     "audio"
   ],
-  "samples": [ {
-    "displayName": "Samples",
-    "description": "Contains samples of this package",
-    "path": "Samples~/Samples"
-  } ],
+  "samples": [
+    {
+      "displayName": "Samples",
+      "description": "Contains samples of this package",
+      "path": "Samples~/Samples"
+    }
+  ],
   "author": {
     "name": "grapefrukt",
     "url": "https://github.com/grapefrukt/usfxr"
