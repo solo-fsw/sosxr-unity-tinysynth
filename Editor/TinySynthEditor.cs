@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-namespace SOSXR.TinySynth
+namespace SOSXR.TinySynth.EditorScripts
 {
     [CustomPropertyDrawer(typeof(TinySynthSound))]
     public class TinySynthEditor : PropertyDrawer
