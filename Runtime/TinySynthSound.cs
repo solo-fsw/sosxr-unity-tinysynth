@@ -13,136 +13,135 @@ namespace SOSXR.TinySynth
     public struct TinySynthSound
     {
         /// Shape of wave to generate
-        [FormerlySerializedAs("m_tinySynthWaveType")]
-        [Tooltip("Shape of wave to generate")]
-        [TinySynthDefault(2)] [SerializeField] public TinySynthWaveType WaveType;
+        [FormerlySerializedAs("m_tinySynthWaveType")] [Tooltip("Shape of wave to generate")] [TinySynthDefault(2)] [SerializeField]
+        public TinySynthWaveType WaveType;
 
         /// Overall volume of the sound (0 to 1)
-        [Tooltip("Overall volume of the sound")]
-        [TinySynthDefault(1)] [Range(0, 1)] public float MasterVolume;
+        [Tooltip("Overall volume of the sound")] [TinySynthDefault(1)] [Range(0, 1)]
+        public float MasterVolume;
 
         /// Length of the volume envelope attack (0 to 1)
-        [Tooltip("Length of the volume envelope attack")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float attackTime;
+        [Tooltip("Length of the volume envelope attack")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float attackTime;
 
         /// Length of the volume envelope sustain (0 to 1)
-        [Tooltip("Length of the volume envelope sustain")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float sustainTime;
+        [Tooltip("Length of the volume envelope sustain")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float sustainTime;
 
         /// Tilts the sustain envelope for more 'pop' (0 to 1)
-        [Tooltip("Tilts the sustain envelope for more 'pop'")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float sustainPunch;
+        [Tooltip("Tilts the sustain envelope for more 'pop'")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float sustainPunch;
 
         /// Length of the volume envelope decay (yes, I know it's called release) (0 to 1)
-        [Tooltip("Length of the volume envelope decay (yes, I know it's called release)")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float decayTime;
+        [Tooltip("Length of the volume envelope decay (yes, I know it's called release)")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float decayTime;
 
         /// Base note of the sound (0 to 1)
-        [Tooltip("Base note of the sound")]
-        [TinySynthDefault(.3f)] [Range(0, 1)] public float startFrequency;
+        [Tooltip("Base note of the sound")] [TinySynthDefault(.3f)] [Range(0, 1)]
+        public float startFrequency;
 
         /// If sliding, the sound will stop at this frequency, to prevent really low notes (0 to 1)
-        [Tooltip("If sliding, the sound will stop at this frequency, to prevent really low notes")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float minFrequency;
+        [Tooltip("If sliding, the sound will stop at this frequency, to prevent really low notes")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float minFrequency;
 
         /// Slides the note up or down (-1 to 1)
-        [Tooltip("Slides the note up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float slide;
+        [Tooltip("Slides the note up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float slide;
 
         /// Accelerates the slide (-1 to 1)
-        [Tooltip("Accelerates the slide")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float deltaSlide;
+        [Tooltip("Accelerates the slide")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float deltaSlide;
 
         /// Strength of the vibrato effect (0 to 1)
-        [Tooltip("Strength of the vibrato effect")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float vibratoDepth;
+        [Tooltip("Strength of the vibrato effect")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float vibratoDepth;
 
         /// Speed of the vibrato effect (i.e. frequency) (0 to 1)
-        [Tooltip("Speed of the vibrato effect (i.e. frequency)")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float vibratoSpeed;
+        [Tooltip("Speed of the vibrato effect (i.e. frequency)")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float vibratoSpeed;
 
         /// Shift in note, either up or down (-1 to 1)
-        [Tooltip("Shift in note, either up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float changeAmount;
+        [Tooltip("Shift in note, either up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float changeAmount;
 
         /// How fast the note shift happens (only happens once) (0 to 1)
-        [Tooltip("How fast the note shift happens (only happens once)")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float changeSpeed;
+        [Tooltip("How fast the note shift happens (only happens once)")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float changeSpeed;
 
         /// Controls the ratio between the up and down states of the square wave, changing the timbre (0 to 1)
-        [Tooltip("Controls the ratio between the up and down states of the square wave, changing the timbre")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float squareDuty;
+        [Tooltip("Controls the ratio between the up and down states of the square wave, changing the timbre")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float squareDuty;
 
         /// Sweeps the duty up or down (-1 to 1)
-        [Tooltip("Sweeps the duty up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float dutySweep;
+        [Tooltip("Sweeps the duty up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float dutySweep;
 
         /// Speed of the note repeating - certain variables are reset each time (0 to 1)
-        [Tooltip("Speed of the note repeating - certain variables are reset each time")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float repeatSpeed;
+        [Tooltip("Speed of the note repeating - certain variables are reset each time")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float repeatSpeed;
 
         /// Offsets a second copy of the wave by a small phase, changing the timbre (-1 to 1)
-        [Tooltip("Offsets a second copy of the wave by a small phase, changing the timbre")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float phaserOffset;
+        [Tooltip("Offsets a second copy of the wave by a small phase, changing the timbre")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float phaserOffset;
 
         /// Sweeps the phase up or down (-1 to 1)
-        [Tooltip("Sweeps the phase up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float phaserSweep;
+        [Tooltip("Sweeps the phase up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float phaserSweep;
 
         /// Frequency at which the low-pass filter starts attenuating higher frequencies (0 to 1)
-        [Tooltip("Frequency at which the low-pass filter starts attenuating higher frequencies")]
-        [TinySynthDefault(1)] [Range(0, 1)] public float lpFilterCutoff;
+        [Tooltip("Frequency at which the low-pass filter starts attenuating higher frequencies")] [TinySynthDefault(1)] [Range(0, 1)]
+        public float lpFilterCutoff;
 
         /// Sweeps the low-pass cutoff up or down (-1 to 1)
-        [Tooltip("Sweeps the low-pass cutoff up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float lpFilterCutoffSweep;
+        [Tooltip("Sweeps the low-pass cutoff up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float lpFilterCutoffSweep;
 
         /// Changes the attenuation rate for the low-pass filter, changing the timbre (0 to 1)
-        [Tooltip("Changes the attenuation rate for the low-pass filter, changing the timbre")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float lpFilterResonance;
+        [Tooltip("Changes the attenuation rate for the low-pass filter, changing the timbre")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float lpFilterResonance;
 
         /// Frequency at which the high-pass filter starts attenuating lower frequencies (0 to 1)
-        [Tooltip("Frequency at which the high-pass filter starts attenuating lower frequencies")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float hpFilterCutoff;
+        [Tooltip("Frequency at which the high-pass filter starts attenuating lower frequencies")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float hpFilterCutoff;
 
         /// Sweeps the high-pass cutoff up or down (-1 to 1)
-        [Tooltip("Sweeps the high-pass cutoff up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float hpFilterCutoffSweep;
+        [Tooltip("Sweeps the high-pass cutoff up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float hpFilterCutoffSweep;
 
         // From BFXR
         /// Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation (0 to 1)
-        [Tooltip("Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float changeRepeat;
+        [Tooltip("Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float changeRepeat;
 
         /// Shift in note, either up or down (-1 to 1)
-        [Tooltip("Shift in note, either up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float changeAmount2;
+        [Tooltip("Shift in note, either up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float changeAmount2;
 
         /// How fast the note shift happens (only happens once) (0 to 1)
-        [Tooltip("How fast the note shift happens (only happens once)")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float changeSpeed2;
+        [Tooltip("How fast the note shift happens (only happens once)")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float changeSpeed2;
 
         /// Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound
         /// effects, where you want them to stick out against background music (0 to 1)
-        [Tooltip("Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound effects, where you want them to stick out against background music")]
-        [TinySynthDefault(.3f)] [Range(0, 1)] public float compressionAmount;
+        [Tooltip("Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound effects, where you want them to stick out against background music")] [TinySynthDefault(.3f)] [Range(0, 1)]
+        public float compressionAmount;
 
         /// Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or
         /// otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!) (0 to 1)
-        [Tooltip("Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!)")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float overtones;
+        [Tooltip("Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!)")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float overtones;
 
         /// Harmonics falloff: the rate at which higher overtones should decay (0 to 1)
-        [Tooltip("Harmonics falloff: the rate at which higher overtones should decay")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float overtoneFalloff;
+        [Tooltip("Harmonics falloff: the rate at which higher overtones should decay")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float overtoneFalloff;
 
         /// Bit crush: resamples the audio at a lower frequency (0 to 1)
-        [Tooltip("Bit crush: resamples the audio at a lower frequency")]
-        [TinySynthDefault(0)] [Range(0, 1)] public float bitCrush;
+        [Tooltip("Bit crush: resamples the audio at a lower frequency")] [TinySynthDefault(0)] [Range(0, 1)]
+        public float bitCrush;
 
         /// Bit crush sweep: sweeps the Bit Crush filter up or down (-1 to 1)
-        [Tooltip("Bit crush sweep: sweeps the Bit Crush filter up or down")]
-        [TinySynthDefault(0)] [Range(-1, 1)] public float bitCrushSweep;
+        [Tooltip("Bit crush sweep: sweeps the Bit Crush filter up or down")] [TinySynthDefault(0)] [Range(-1, 1)]
+        public float bitCrushSweep;
 
 
         /// <summary>
@@ -362,7 +361,7 @@ namespace SOSXR.TinySynth
         {
             Reset();
 
-            WaveType = (TinySynthWaveType) (uint) (GetRandom() * 9f);
+            WaveType = (TinySynthWaveType)(uint)(GetRandom() * 9f);
 
             attackTime = Pow(GetRandom() * 2f - 1f, 4);
             sustainTime = Pow(GetRandom() * 2f - 1f, 2);
@@ -527,7 +526,7 @@ namespace SOSXR.TinySynth
                 // Old format (SFXR): 24 parameters
                 Reset();
 
-                WaveType = (TinySynthWaveType) ParseUint(values[0]);
+                WaveType = (TinySynthWaveType)ParseUint(values[0]);
                 attackTime = ParseFloat(values[1]);
                 sustainTime = ParseFloat(values[2]);
                 sustainPunch = ParseFloat(values[3]);
@@ -557,7 +556,7 @@ namespace SOSXR.TinySynth
                 // New format (BFXR): 32 parameters (or more, but locked parameters are ignored)
                 Reset();
 
-                WaveType = (TinySynthWaveType) ParseUint(values[0]);
+                WaveType = (TinySynthWaveType)ParseUint(values[0]);
                 MasterVolume = ParseFloat(values[1]);
                 attackTime = ParseFloat(values[2]);
                 sustainTime = ParseFloat(values[3]);

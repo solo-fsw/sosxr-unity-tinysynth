@@ -5,7 +5,6 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-
 namespace SOSXR.TinySynth
 {
     [CustomPropertyDrawer(typeof(TinySynthSound))]
@@ -138,7 +137,7 @@ namespace SOSXR.TinySynth
                 return;
             }
 
-            var buttonPosition = new Rect(position) {x = position.x + position.width - ButtonWidth * 2 - ButtonMargin, width = ButtonWidth};
+            var buttonPosition = new Rect(position) { x = position.x + position.width - ButtonWidth * 2 - ButtonMargin, width = ButtonWidth };
 
             if (GUI.Button(buttonPosition, new GUIContent("R", "Reset this parameter to its default value")))
             {
@@ -237,7 +236,7 @@ namespace SOSXR.TinySynth
                 return;
             }
 
-            var synth = new TinySynthRenderer {param = PropertyToParams(property)};
+            var synth = new TinySynthRenderer { param = PropertyToParams(property) };
             File.WriteAllBytes(path, synth.GetWavFile());
         }
 
@@ -266,7 +265,8 @@ namespace SOSXR.TinySynth
                 }
 
                 yield return currentProperty;
-            } while (currentProperty.NextVisible(false));
+            }
+            while (currentProperty.NextVisible(false));
         }
 
 
@@ -295,7 +295,7 @@ namespace SOSXR.TinySynth
                 }
                 else if (prop.type == "float")
                 {
-                    prop.floatValue = (float) field.GetValue(param);
+                    prop.floatValue = (float)field.GetValue(param);
                 }
             }
         }
@@ -316,7 +316,7 @@ namespace SOSXR.TinySynth
 
             foreach (var field in _paramFields)
             {
-                var data = new ParamData {Default = 0, Min = 0, Max = 1};
+                var data = new ParamData { Default = 0, Min = 0, Max = 1 };
 
                 if (field.GetCustomAttribute(typeof(RangeAttribute)) is RangeAttribute rangeAttribute)
                 {
@@ -358,7 +358,7 @@ namespace SOSXR.TinySynth
                 return new TinySynthSound();
             }
 
-            return (TinySynthSound) field.GetValue(target);
+            return (TinySynthSound)field.GetValue(target);
         }
 
 

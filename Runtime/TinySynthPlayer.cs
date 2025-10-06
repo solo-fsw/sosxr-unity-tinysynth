@@ -14,12 +14,10 @@ namespace SOSXR.TinySynth
     [RequireComponent(typeof(AudioSource))]
     public class TinySynthPlayer : MonoBehaviour
     {
-        [Header("A higher polyphony means you can play more sound effects simultaneously.")]
-        [Range(1, 16)]
+        [Header("A higher polyphony means you can play more sound effects simultaneously.")] [Range(1, 16)]
         public int polyphony = 1;
 
-        [Header("Minimum duration (seconds) before allowing to play the same sfx again.")]
-        [Range(0, .5f)]
+        [Header("Minimum duration (seconds) before allowing to play the same sfx again.")] [Range(0, .5f)]
         public float minRetriggerTime = .017f;
 
         private static readonly Dictionary<TinySynthSound, ClipTimeTuple> cache = new();
@@ -74,7 +72,7 @@ namespace SOSXR.TinySynth
                             continue;
                         }
 
-                        CacheGet((TinySynthSound) field.GetValue(obj));
+                        CacheGet((TinySynthSound)field.GetValue(obj));
                         fieldCount++;
                     }
                 }
@@ -257,7 +255,7 @@ namespace SOSXR.TinySynth
         }
 
 
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         private void OnValidate()
         {
             UpdateSources();
@@ -289,6 +287,6 @@ namespace SOSXR.TinySynth
         }
 
 
-        #endif
+#endif
     }
 }

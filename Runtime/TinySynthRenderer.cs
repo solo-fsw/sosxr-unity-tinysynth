@@ -122,7 +122,7 @@ namespace SOSXR.TinySynth
             this.param = param;
             Reset(true);
 
-            var clip = AudioClip.Create("usfxr", (int) envelopeFullLength, 1, 44100, false);
+            var clip = AudioClip.Create("usfxr", (int)envelopeFullLength, 1, 44100, false);
 
             var sampleData = new float[envelopeFullLength];
             SynthWave(sampleData, 0, envelopeFullLength);
@@ -196,9 +196,9 @@ namespace SOSXR.TinySynth
             // Average bytes per second
             writeUintToBytes(wav, ref bytePos, bytesPerSec, Endian.LittleEndian);
             // Block align
-            writeShortToBytes(wav, ref bytePos, (short) blockAlign, Endian.LittleEndian);
+            writeShortToBytes(wav, ref bytePos, (short)blockAlign, Endian.LittleEndian);
             // Significant bits per sample
-            writeShortToBytes(wav, ref bytePos, (short) bitDepth, Endian.LittleEndian);
+            writeShortToBytes(wav, ref bytePos, (short)bitDepth, Endian.LittleEndian);
 
             // Data Chunk
 
@@ -230,11 +230,11 @@ namespace SOSXR.TinySynth
 
                 if (bitDepth == 16)
                 {
-                    writeShortToBytes(wav, ref bytePos, (short) Math.Round(32000f * bufferSample), Endian.LittleEndian);
+                    writeShortToBytes(wav, ref bytePos, (short)Math.Round(32000f * bufferSample), Endian.LittleEndian);
                 }
                 else
                 {
-                    writeBytes(wav, ref bytePos, new[] {(byte) (Math.Round(bufferSample * 127f) + 128)}, Endian.LittleEndian);
+                    writeBytes(wav, ref bytePos, new[] { (byte)(Math.Round(bufferSample * 127f) + 128) }, Endian.LittleEndian);
                 }
 
                 bufferSample = 0f;
@@ -287,7 +287,7 @@ namespace SOSXR.TinySynth
             }
             else
             {
-                changeLimit = (int) ((1f - p.changeSpeed) * (1f - p.changeSpeed) * 20000f + 32f);
+                changeLimit = (int)((1f - p.changeSpeed) * (1f - p.changeSpeed) * 20000f + 32f);
             }
 
             if (p.changeAmount2 > 0f)
@@ -308,11 +308,11 @@ namespace SOSXR.TinySynth
             }
             else
             {
-                changeLimit2 = (int) ((1f - p.changeSpeed2) * (1f - p.changeSpeed2) * 20000f + 32f);
+                changeLimit2 = (int)((1f - p.changeSpeed2) * (1f - p.changeSpeed2) * 20000f + 32f);
             }
 
-            changeLimit = (int) (changeLimit * ((1f - p.changeRepeat + 0.1f) / 1.1f));
-            changeLimit2 = (int) (changeLimit2 * ((1f - p.changeRepeat + 0.1f) / 1.1f));
+            changeLimit = (int)(changeLimit * ((1f - p.changeRepeat + 0.1f) / 1.1f));
+            changeLimit2 = (int)(changeLimit2 * ((1f - p.changeRepeat + 0.1f) / 1.1f));
 
             if (!totalReset)
             {
@@ -342,7 +342,7 @@ namespace SOSXR.TinySynth
 
             phase = 0;
 
-            overtones = (int) (p.overtones * 10f);
+            overtones = (int)(p.overtones * 10f);
             overtoneFalloff = p.overtoneFalloff;
 
             minFrequency = p.minFrequency;
@@ -385,7 +385,7 @@ namespace SOSXR.TinySynth
             envelopeLength1 = p.sustainTime * p.sustainTime * 100000.0f;
             envelopeLength2 = p.decayTime * p.decayTime * 100000.0f + 10f;
             envelopeLength = envelopeLength0;
-            envelopeFullLength = (uint) (envelopeLength0 + envelopeLength1 + envelopeLength2);
+            envelopeFullLength = (uint)(envelopeLength0 + envelopeLength1 + envelopeLength2);
 
             envelopeOverLength0 = 1.0f / envelopeLength0;
             envelopeOverLength1 = 1.0f / envelopeLength1;
@@ -458,7 +458,7 @@ namespace SOSXR.TinySynth
             }
             else
             {
-                repeatLimit = (int) ((1.0 - p.repeatSpeed) * (1.0 - p.repeatSpeed) * 20000) + 32;
+                repeatLimit = (int)((1.0 - p.repeatSpeed) * (1.0 - p.repeatSpeed) * 20000) + 32;
             }
         }
 
@@ -470,7 +470,7 @@ namespace SOSXR.TinySynth
         {
             var finished = false;
 
-            for (var i = 0; i < (int) length; i++)
+            for (var i = 0; i < (int)length; i++)
             {
                 if (finished)
                 {
@@ -552,7 +552,7 @@ namespace SOSXR.TinySynth
                     periodTemp = period * (1.0f + Mathf.Sin(vibratoPhase) * vibratoAmplitude);
                 }
 
-                periodTempInt = (int) periodTemp;
+                periodTempInt = (int)periodTemp;
 
                 if (periodTemp < 8)
                 {
@@ -618,7 +618,7 @@ namespace SOSXR.TinySynth
                 if (phaser)
                 {
                     phaserOffset += phaserDeltaOffset;
-                    phaserInt = (int) phaserOffset;
+                    phaserInt = (int)phaserOffset;
 
                     if (phaserInt < 0)
                     {
@@ -724,7 +724,7 @@ namespace SOSXR.TinySynth
                                 break;
                             case TinySynthWaveType.Noise:
                                 // Noise
-                                sample = noiseBuffer[(uint) (tempPhase * 32f / periodTempInt) % 32];
+                                sample = noiseBuffer[(uint)(tempPhase * 32f / periodTempInt) % 32];
 
                                 break;
                             case TinySynthWaveType.Triangle:
@@ -732,12 +732,12 @@ namespace SOSXR.TinySynth
 
                                 break;
                             case TinySynthWaveType.PinkNoise:
-                                sample = pinkNoiseBuffer[(uint) (tempPhase * 32f / periodTempInt) % 32];
+                                sample = pinkNoiseBuffer[(uint)(tempPhase * 32f / periodTempInt) % 32];
 
                                 break;
                             case TinySynthWaveType.Tan:
                                 // Tan
-                                sample = (float) Math.Tan(Math.PI * tempPhase / periodTemp);
+                                sample = (float)Math.Tan(Math.PI * tempPhase / periodTemp);
 
                                 break;
                             case TinySynthWaveType.Whistle:
@@ -874,7 +874,7 @@ namespace SOSXR.TinySynth
         /// </summary>
         private static void writeShortToBytes(byte[] bytes, ref int position, short newShort, Endian endian)
         {
-            writeBytes(bytes, ref position, new byte[2] {(byte) ((newShort >> 8) & 0xff), (byte) (newShort & 0xff)}, endian);
+            writeBytes(bytes, ref position, new byte[2] { (byte)((newShort >> 8) & 0xff), (byte)(newShort & 0xff) }, endian);
         }
 
 
@@ -884,7 +884,7 @@ namespace SOSXR.TinySynth
         /// </summary>
         private static void writeUintToBytes(byte[] bytes, ref int position, uint newUint, Endian endian)
         {
-            writeBytes(bytes, ref position, new[] {(byte) ((newUint >> 24) & 0xff), (byte) ((newUint >> 16) & 0xff), (byte) ((newUint >> 8) & 0xff), (byte) (newUint & 0xff)}, endian);
+            writeBytes(bytes, ref position, new[] { (byte)((newUint >> 24) & 0xff), (byte)((newUint >> 16) & 0xff), (byte)((newUint >> 8) & 0xff), (byte)(newUint & 0xff) }, endian);
         }
 
 
@@ -942,7 +942,7 @@ namespace SOSXR.TinySynth
 
             for (i = 0; i < 5; i++)
             {
-                whiteValues[i] = (uint) (randomGenerator.NextDouble() % 1 * rangeBy5);
+                whiteValues[i] = (uint)(randomGenerator.NextDouble() % 1 * rangeBy5);
             }
         }
 
@@ -971,7 +971,7 @@ namespace SOSXR.TinySynth
                 // white_value
                 if ((diff & (1 << i)) > 0)
                 {
-                    whiteValues[i] = (uint) (randomGenerator.NextDouble() % 1 * rangeBy5);
+                    whiteValues[i] = (uint)(randomGenerator.NextDouble() % 1 * rangeBy5);
                 }
 
                 ;
