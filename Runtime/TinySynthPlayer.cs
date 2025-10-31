@@ -72,7 +72,7 @@ namespace SOSXR.TinySynth
                             continue;
                         }
 
-                        CacheGet((TinySynthSound)field.GetValue(obj));
+                        CacheGet((TinySynthSound) field.GetValue(obj));
                         fieldCount++;
                     }
                 }
@@ -255,7 +255,7 @@ namespace SOSXR.TinySynth
         }
 
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         private void OnValidate()
         {
             UpdateSources();
@@ -287,6 +287,6 @@ namespace SOSXR.TinySynth
         }
 
 
-#endif
+        #endif
     }
 }

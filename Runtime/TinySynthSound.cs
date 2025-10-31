@@ -361,7 +361,7 @@ namespace SOSXR.TinySynth
         {
             Reset();
 
-            WaveType = (TinySynthWaveType)(uint)(GetRandom() * 9f);
+            WaveType = (TinySynthWaveType) (uint) (GetRandom() * 9f);
 
             attackTime = Pow(GetRandom() * 2f - 1f, 4);
             sustainTime = Pow(GetRandom() * 2f - 1f, 2);
@@ -526,7 +526,7 @@ namespace SOSXR.TinySynth
                 // Old format (SFXR): 24 parameters
                 Reset();
 
-                WaveType = (TinySynthWaveType)ParseUint(values[0]);
+                WaveType = (TinySynthWaveType) ParseUint(values[0]);
                 attackTime = ParseFloat(values[1]);
                 sustainTime = ParseFloat(values[2]);
                 sustainPunch = ParseFloat(values[3]);
@@ -556,7 +556,7 @@ namespace SOSXR.TinySynth
                 // New format (BFXR): 32 parameters (or more, but locked parameters are ignored)
                 Reset();
 
-                WaveType = (TinySynthWaveType)ParseUint(values[0]);
+                WaveType = (TinySynthWaveType) ParseUint(values[0]);
                 MasterVolume = ParseFloat(values[1]);
                 attackTime = ParseFloat(values[2]);
                 sustainTime = ParseFloat(values[3]);

@@ -20,9 +20,9 @@
             }
 
             p.changeSpeed = 0.5f + GetRandom() * 0.2f;
-            var cnum = (int)(GetRandom() * 7f) + 1;
-            var cden = cnum + (int)(GetRandom() * 7f) + 2;
-            p.changeAmount = cnum / (float)cden;
+            var cnum = (int) (GetRandom() * 7f) + 1;
+            var cden = cnum + (int) (GetRandom() * 7f) + 2;
+            p.changeAmount = cnum / (float) cden;
 
             return p;
         }
@@ -36,11 +36,11 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.WaveType = (TinySynthWaveType)(uint)(GetRandom() * 3);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 3);
 
             if (p.WaveType == TinySynthWaveType.Sine && GetRandomBool())
             {
-                p.WaveType = (TinySynthWaveType)(uint)(GetRandom() * 2f);
+                p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
             }
 
             p.startFrequency = 0.5f + GetRandom() * 0.5f;
@@ -197,7 +197,7 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.WaveType = (TinySynthWaveType)(uint)(GetRandom() * 3f);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 3f);
 
             if (p.WaveType == TinySynthWaveType.Sine)
             {
@@ -261,7 +261,7 @@
             var p = new TinySynthSound();
             p.Reset();
 
-            p.WaveType = (TinySynthWaveType)(uint)(GetRandom() * 2f);
+            p.WaveType = (TinySynthWaveType) (uint) (GetRandom() * 2f);
 
             if (p.WaveType == 0)
             {
