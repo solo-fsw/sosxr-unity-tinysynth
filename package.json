@@ -3,6 +3,7 @@
   "version": "0.2.1",
   "displayName": "Tiny Synth",
   "description": "quick prototype sound effects",
+  "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-tinysynth",
   "unity": "2019.1",
   "keywords": [
     "audio"
