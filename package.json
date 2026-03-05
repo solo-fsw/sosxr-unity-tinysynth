@@ -1,8 +1,8 @@
 {
   "name": "com.grapefrukt.utils.usfxr",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "displayName": "Tiny Synth",
-  "description": "quick prototype sound effects",
+  "description": "Quick prototype sound effects",
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-tinysynth",
   "unity": "2019.1",
   "keywords": [
@@ -10,9 +10,9 @@
   ],
   "samples": [
     {
-      "displayName": "Samples",
-      "description": "Contains samples of this package",
-      "path": "Samples~/Samples"
+      "displayName": "Disco",
+      "description": "Contains some music samples",
+      "path": "Samples~/Disco"
     }
   ],
   "author": {
