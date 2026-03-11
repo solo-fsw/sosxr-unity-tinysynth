@@ -10,6 +10,7 @@ namespace SOSXR.TinySynth
     /// </summary>
     public class TinySynthRenderer
     {
+        /// <summary>The <see cref="TinySynthSound" /> parameters used for the current render pass.</summary>
         public TinySynthSound param;
 
         // Synth properties
@@ -133,6 +134,12 @@ namespace SOSXR.TinySynth
         }
 
 
+        /// <summary>
+        ///     Renders the current <see cref="param" /> to a raw WAV byte array.
+        /// </summary>
+        /// <param name="sampleRate">Output sample rate. Any value other than 44100 is rounded down to 22050.</param>
+        /// <param name="bitDepth">Bit depth of the output. Any value other than 16 is rounded down to 8.</param>
+        /// <returns>A byte array containing a fully-formed WAV file.</returns>
         public byte[] GetWavFile(uint sampleRate = 44100, uint bitDepth = 16)
         {
             Reset(true);

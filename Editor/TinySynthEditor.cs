@@ -8,6 +8,10 @@ using UnityEngine;
 
 namespace SOSXR.TinySynth
 {
+    /// <summary>
+    ///     Custom property drawer for <see cref="TinySynthSound" />. Renders a waveform preview, preset buttons,
+    ///     per-parameter sliders with reset and lock controls, and an export-to-WAV option in the context menu.
+    /// </summary>
     [CustomPropertyDrawer(typeof(TinySynthSound))]
     public class TinySynthEditor : PropertyDrawer
     {
@@ -28,6 +32,10 @@ namespace SOSXR.TinySynth
         private static readonly Color CurveColor = new(1.0f, 140.0f / 255.0f, 0.0f, 1.0f);
 
 
+        /// <summary>
+        ///     Draws the full <see cref="TinySynthSound" /> property in the Inspector, including the waveform
+        ///     preview, preset row, and all parameter sliders.
+        /// </summary>
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
             UpdateReflection();
@@ -47,6 +55,9 @@ namespace SOSXR.TinySynth
         }
 
 
+        /// <summary>
+        ///     Returns the total pixel height required by this property drawer so the Inspector can reserve the correct amount of space.
+        /// </summary>
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
             return _height;

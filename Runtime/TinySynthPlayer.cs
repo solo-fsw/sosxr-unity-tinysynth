@@ -14,9 +14,11 @@ namespace SOSXR.TinySynth
     [RequireComponent(typeof(AudioSource))]
     public class TinySynthPlayer : MonoBehaviour
     {
+        /// <summary>Maximum number of sound effects that can play simultaneously. Each polyphony slot maps to one <see cref="AudioSource" /> on this GameObject.</summary>
         [Header("A higher polyphony means you can play more sound effects simultaneously.")] [Range(1, 16)]
         public int polyphony = 1;
 
+        /// <summary>Minimum time in seconds that must elapse before the same <see cref="TinySynthSound" /> can be triggered again. Prevents rapid retriggering artifacts.</summary>
         [Header("Minimum duration (seconds) before allowing to play the same sfx again.")] [Range(0, .5f)]
         public float minRetriggerTime = .017f;
 
@@ -138,6 +140,11 @@ namespace SOSXR.TinySynth
         }
 
 
+        /// <summary>
+        ///     Returns the rendered <see cref="AudioClip" /> for the supplied parameters, generating and caching it if needed.
+        /// </summary>
+        /// <param name="param">The sound effect parameters to render.</param>
+        /// <returns>A cached or freshly generated <see cref="AudioClip" />.</returns>
         public static AudioClip GetClip(TinySynthSound param)
         {
             return CacheGet(param).clip;
