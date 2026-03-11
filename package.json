@@ -5,6 +5,9 @@
   "description": "Quick prototype sound effects",
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-tinysynth",
   "unity": "2019.1",
+  "dependencies": {
+    "com.unity.modules.audio": "1.0.0"
+  },
   "keywords": [
     "audio"
   ],
