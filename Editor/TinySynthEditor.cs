@@ -358,6 +358,11 @@ namespace SOSXR.TinySynth
 
         private static TinySynthSound PropertyToParams(SerializedProperty property)
         {
+            if (property?.serializedObject?.targetObject == null)
+            {
+                return new TinySynthSound();
+            }
+
             var target = property.serializedObject.targetObject;
             var type = target.GetType();
             var field = type.GetField(property.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);

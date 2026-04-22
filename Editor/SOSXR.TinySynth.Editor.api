@@ -1,0 +1,12 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+namespace SOSXR.TinySynth
+{
+    [UnityEditor.CustomPropertyDrawer(typeof(TinySynthSound))] public class TinySynthEditor : UnityEditor.PropertyDrawer
+    {
+        public TinySynthEditor() {}
+        public override float GetPropertyHeight(UnityEditor.SerializedProperty property, UnityEngine.GUIContent label);
+        public override void OnGUI(UnityEngine.Rect position, UnityEditor.SerializedProperty property, UnityEngine.GUIContent label);
+    }
+}

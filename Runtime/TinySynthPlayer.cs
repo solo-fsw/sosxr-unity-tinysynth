@@ -61,7 +61,7 @@ namespace SOSXR.TinySynth
                 }
 
                 var fields = type.GetFields(BindingFlags.Public | BindingFlags.Instance);
-                var objects = FindObjectsByType(type, FindObjectsSortMode.None);
+                    var objects = FindObjectsByType(type, FindObjectsInactive.Exclude);
 
                 foreach (var obj in objects)
                 {
@@ -184,7 +184,7 @@ namespace SOSXR.TinySynth
         {
             if (instance == null)
             {
-                instance = FindFirstObjectByType<TinySynthPlayer>();
+                instance = FindAnyObjectByType<TinySynthPlayer>();
             }
 
             if (instance == null)

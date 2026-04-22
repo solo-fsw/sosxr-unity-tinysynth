@@ -1,0 +1,97 @@
+// This file is generated. Do not modify by hand.
+// XML documentation file not found. To check if public methods have XML comments,
+// make sure the XML doc file is present and located next to the scraped dll
+namespace SOSXR.TinySynth
+{
+    [System.AttributeUsage(System.AttributeTargets.Field)] public class TinySynthDefaultAttribute : System.Attribute
+    {
+        public readonly float value;
+        public TinySynthDefaultAttribute(float value) {}
+    }
+
+    [UnityEngine.RequireComponent(typeof(UnityEngine.AudioSource))] public class TinySynthPlayer : UnityEngine.MonoBehaviour
+    {
+        [UnityEngine.Header(@"Minimum duration (seconds) before allowing to play the same sfx again.")] [UnityEngine.Range(0f, 0.5f)] public float minRetriggerTime = 0.017f;
+        [UnityEngine.Header(@"A higher polyphony means you can play more sound effects simultaneously.")] [UnityEngine.Range(1f, 16f)] public int polyphony = 1;
+        public TinySynthPlayer() {}
+        public static UnityEngine.AudioClip GetClip(TinySynthSound param);
+        public static void Play(TinySynthSound param, bool asPreview = false);
+        public static void PreCache(UnityEngine.MonoBehaviour behaviour);
+    }
+
+    public static class TinySynthPreset
+    {
+        public static TinySynthSound BlipSelect();
+        public static TinySynthSound Explosion();
+        public static TinySynthSound HitHurt();
+        public static TinySynthSound Jump();
+        public static TinySynthSound LaserShoot();
+        public static TinySynthSound PickupCoin();
+        public static TinySynthSound PowerUp();
+    }
+
+    public class TinySynthRenderer
+    {
+        public TinySynthSound param;
+        public TinySynthRenderer() {}
+        public UnityEngine.AudioClip GenerateClip(TinySynthSound param);
+        public byte[] GetWavFile(uint sampleRate = 44100, uint bitDepth = 16);
+    }
+
+    public struct TinySynthSound
+    {
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Length of the volume envelope attack")] public float attackTime;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Bit crush: resamples the audio at a lower frequency")] public float bitCrush;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Bit crush sweep: sweeps the Bit Crush filter up or down")] public float bitCrushSweep;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Shift in note, either up or down")] public float changeAmount;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Shift in note, either up or down")] public float changeAmount2;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Pitch Jump Repeat Speed: larger Values means more pitch jumps, which can be useful for arpeggiation")] public float changeRepeat;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"How fast the note shift happens (only happens once)")] public float changeSpeed;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"How fast the note shift happens (only happens once)")] public float changeSpeed2;
+        [TinySynthDefault(0.3f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Compression: pushes amplitudes together into a narrower range to make them stand out more. Very good for sound effects, where you want them to stick out against background music")] public float compressionAmount;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Length of the volume envelope decay (yes, I know it's called release)")] public float decayTime;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Accelerates the slide")] public float deltaSlide;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Sweeps the duty up or down")] public float dutySweep;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Frequency at which the high-pass filter starts attenuating lower frequencies")] public float hpFilterCutoff;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Sweeps the high-pass cutoff up or down")] public float hpFilterCutoffSweep;
+        [TinySynthDefault(1f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Frequency at which the low-pass filter starts attenuating higher frequencies")] public float lpFilterCutoff;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Sweeps the low-pass cutoff up or down")] public float lpFilterCutoffSweep;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Changes the attenuation rate for the low-pass filter, changing the timbre")] public float lpFilterResonance;
+        [TinySynthDefault(1f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Overall volume of the sound")] public float MasterVolume;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"If sliding, the sound will stop at this frequency, to prevent really low notes")] public float minFrequency;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Harmonics falloff: the rate at which higher overtones should decay")] public float overtoneFalloff;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Harmonics: overlays copies of the waveform with copies and multiples of its frequency. Good for bulking out or otherwise enriching the texture of the sounds (warning: this is the number 1 cause of usfxr slowdown!)")] public float overtones;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Offsets a second copy of the wave by a small phase, changing the timbre")] public float phaserOffset;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Sweeps the phase up or down")] public float phaserSweep;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Speed of the note repeating - certain variables are reset each time")] public float repeatSpeed;
+        [TinySynthDefault(0f)] [UnityEngine.Range(-1f, 1f)] [UnityEngine.Tooltip(@"Slides the note up or down")] public float slide;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Controls the ratio between the up and down states of the square wave, changing the timbre")] public float squareDuty;
+        [TinySynthDefault(0.3f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Base note of the sound")] public float startFrequency;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Tilts the sustain envelope for more 'pop'")] public float sustainPunch;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Length of the volume envelope sustain")] public float sustainTime;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Strength of the vibrato effect")] public float vibratoDepth;
+        [TinySynthDefault(0f)] [UnityEngine.Range(0f, 1f)] [UnityEngine.Tooltip(@"Speed of the vibrato effect (i.e. frequency)")] public float vibratoSpeed;
+        [TinySynthDefault(2f)] [UnityEngine.Serialization.FormerlySerializedAs(@"m_tinySynthWaveType")] [UnityEngine.SerializeField] [UnityEngine.Tooltip(@"Shape of wave to generate")] public TinySynthWaveType WaveType;
+        public static float GetRandom();
+        public static bool GetRandomBool();
+        public string GetSettingsString();
+        public string GetSettingsStringLegacy();
+        public void Mutate(float amount = 0.05f);
+        public void Randomize();
+        public void Reset();
+        public bool SetSettingsString(string input);
+    }
+
+    public enum TinySynthWaveType : uint
+    {
+        Square = 0,
+        Sawtooth = 1,
+        Sine = 2,
+        Noise = 3,
+        Triangle = 4,
+        PinkNoise = 5,
+        Tan = 6,
+        Whistle = 7,
+        Breaker = 8,
+    }
+}
