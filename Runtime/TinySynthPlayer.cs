@@ -197,6 +197,12 @@ namespace SOSXR.TinySynth
         private static void UpdateSources()
         {
             UpdateInstance();
+
+            if (instance == null)
+            {
+                return;
+            }
+
             sources = instance.GetComponents<AudioSource>();
         }
 
@@ -269,7 +275,7 @@ namespace SOSXR.TinySynth
 
             // make sure we have the correct amount of audio sources
             // this needs to be done later since unity gets grumpy if we add/remove components in OnValidate
-            if (sources.Length != polyphony)
+            if (sources != null && sources.Length != polyphony)
             {
                 EditorApplication.delayCall += PurgeAndAddSources;
             }
