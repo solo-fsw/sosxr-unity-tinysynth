@@ -1,0 +1,70 @@
+name: UPM release
+
+on:
+  push:
+    branches:
+      - dev
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  upm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine target
+        run: |
+          if [ "$GITHUB_REF_TYPE" = "tag" ]; then
+            echo "TARGET_BRANCH=upm" >> "$GITHUB_ENV"
+            echo "IS_TAG=true" >> "$GITHUB_ENV"
+          else
+            echo "TARGET_BRANCH=upm-${GITHUB_REF_NAME}" >> "$GITHUB_ENV"
+            echo "IS_TAG=false" >> "$GITHUB_ENV"
+          fi
+
+      - name: Check tag matches package.json version
+        if: env.IS_TAG == 'true'
+        run: |
+          PKG_VERSION=$(jq -r .version package.json)
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version $PKG_VERSION"
+            exit 1
+          fi
+
+      - name: Rename Samples to Samples~
+        run: |
+          if [ -d Samples ]; then
+            git mv Samples Samples~
+            git rm -f --ignore-unmatch Samples.meta
+          fi
+
+      - name: Rewrite sample paths in package.json
+        run: |
+          jq '
+            if .samples then
+              .samples |= map(
+                .path |= sub("^Samples/"; "Samples~/")
+                | if .images then .images |= map(sub("^Samples/"; "Samples~/")) else . end
+              )
+            else . end
+          ' package.json > package.json.tmp
+          mv package.json.tmp package.json
+
+      - name: Commit and push
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898732+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "UPM build from ${GITHUB_REF_NAME} (${GITHUB_SHA::7})"
+          git push --force origin "HEAD:refs/heads/${TARGET_BRANCH}"
+          if [ "$IS_TAG" = "true" ]; then
+            git tag "upm/${GITHUB_REF_NAME}"
+            git push origin "upm/${GITHUB_REF_NAME}"
+          fi
