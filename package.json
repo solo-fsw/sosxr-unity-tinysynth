@@ -1,10 +1,10 @@
 {
   "name": "com.grapefrukt.utils.usfxr",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "displayName": "Tiny Synth",
   "description": "Quick prototype sound effects",
   "documentationUrl": "https://github.com/solo-fsw/sosxr-unity-tinysynth",
-  "unity": "2019.1",
+  "unity": "2022.3",
   "dependencies": {
     "com.unity.modules.audio": "1.0.0"
   },

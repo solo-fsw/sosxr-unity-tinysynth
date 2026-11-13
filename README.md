@@ -38,6 +38,8 @@ Editor — no external tools required.
 1. Fork this repository, then clone it into your Unity project's `Assets` folder.
 2. Make your changes and open a pull request back to the main repository.
 
+Requires Unity 2022.3 or newer.
+
 ### Dev Release
 
 For the latest (possibly unstable) version, append `#dev` to the UPM git URL to track the `dev` branch.
@@ -64,8 +66,14 @@ TinySynthSound (parameters)
         └─► AudioClip ─► TinySynthPlayer (polyphonic AudioSources) ─► AudioListener
 ```
 
-Sound effects are **generated on first play and cached** by `TinySynthPlayer`. The cache holds up to 32 clips; the
-oldest entry is evicted when the limit is reached.
+Sound effects are **generated on first play and cached** by `TinySynthPlayer`.
+
+## Caching
+
+- The cache holds up to 32 clips (`TinySynthPlayer.MaxCacheSize`).
+- When the cache is full, the least recently played clip is destroyed first.
+- `TinySynthPlayer.ClearCache()` destroys all cached clips.
+- `TinySynthPlayer.CacheCount` returns the number of cached clips.
 
 ## Quick Start
 
@@ -204,6 +212,10 @@ stacking too rapidly (e.g. rapid button mashing).
 
 Import the **Samples** package via the Package Manager window (`Samples` tab on the TinySynth entry) to get a
 scene with pre-configured `TinySynthSound` values demonstrating each preset archetype.
+
+## Tests
+
+Tests are EditMode tests in `Tests/Editor/` (assembly `SOSXR.TinySynth.Tests`). Run them in the Unity Test Runner, EditMode tab.
 
 ## Origin and Licence
 

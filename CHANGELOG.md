@@ -5,6 +5,25 @@ The changelog format is based on [Keep a Changelog](https://keepachangelog.com/e
 
 For earlier versions, an original CHANGELOG is not available [at the original repo](https://github.com/grapefrukt/usfxr)
 
+## [0.4.0] - 2026-11-13
+
+### Fixed
+
+- Unguarded `using UnityEditor;` in `TinySynthPlayer.cs` broke player builds. It is now inside `#if UNITY_EDITOR`.
+- `Play` threw a `NullReferenceException` on the second play when no `TinySynthPlayer` was in the scene. It now logs the error and returns.
+- `AudioClip.Create` clips leaked native memory when evicted or cleared from the cache. They are now destroyed.
+- `OnValidate` delayed call used static `sources` and `gameObject` without null checks. It now returns when the component was destroyed, and uses its own AudioSources.
+- The cache could grow without bound when the Inspector preview added clips. The least recently played clip is now destroyed when the cache is full.
+- Static AudioSources went stale after the player was destroyed or replaced. `sourceIndex` could run past the end after polyphony shrank. Both are fixed.
+- Static state is reset at `SubsystemRegistration` and when the active player is destroyed.
+- `package.json` `unity` was `2019.1`, but the code needs `2022.3`.
+
+### Added
+
+- `TinySynthPlayer.MaxCacheSize` is public (32).
+- `TinySynthPlayer.CacheCount` and `TinySynthPlayer.ClearCache()`.
+- EditMode tests in `Tests/Editor/` (`SOSXR.TinySynth.Tests`).
+
 ## [0.2.1] - In Development
 
 > ### Package Numbering Change
