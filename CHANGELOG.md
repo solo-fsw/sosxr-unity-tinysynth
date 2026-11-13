@@ -13,7 +13,7 @@ For earlier versions, an original CHANGELOG is not available [at the original re
 - `Play` threw a `NullReferenceException` on the second play when no `TinySynthPlayer` was in the scene. It now logs the error and returns.
 - `AudioClip.Create` clips leaked native memory when evicted or cleared from the cache. They are now destroyed.
 - `OnValidate` delayed call used static `sources` and `gameObject` without null checks. It now returns when the component was destroyed, and uses its own AudioSources.
-- The cache could grow without bound when the Inspector preview added clips. The least recently played clip is now destroyed when the cache is full.
+- The cache could grow without bound when the Inspector preview added clips. The least recently used clip (played or fetched with `GetClip`) is now destroyed when the cache is full.
 - Static AudioSources went stale after the player was destroyed or replaced. `sourceIndex` could run past the end after polyphony shrank. Both are fixed.
 - Static state is reset at `SubsystemRegistration` and when the active player is destroyed.
 - `package.json` `unity` was `2019.1`, but the code needs `2022.3`.

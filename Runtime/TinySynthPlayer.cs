@@ -35,6 +35,7 @@ namespace SOSXR.TinySynth
         private static AudioSource[] sources;
         /// <summary>Next polyphony slot to use.</summary>
         private static int sourceIndex;
+        private static long _useCounter; // increases on every cache access; the lowest value is the least recently used
 
         /// <summary>Maximum number of rendered clips kept in the cache. The least recently played clip is destroyed first.</summary>
         public const int MaxCacheSize = 32;
@@ -185,6 +186,7 @@ namespace SOSXR.TinySynth
                 }
 
                 entry.firstPlay = false;
+                entry.lastUsed = ++_useCounter;
 
                 return entry;
             }
@@ -195,7 +197,7 @@ namespace SOSXR.TinySynth
                 PurgeCache();
             }
 
-            entry = new ClipTimeTuple(_tinySynthRenderer.GenerateClip(param));
+            entry = new ClipTimeTuple(_tinySynthRenderer.GenerateClip(param)) {lastUsed = ++_useCounter};
             cache.Add(param, entry);
 
             return entry;
@@ -281,7 +283,8 @@ namespace SOSXR.TinySynth
 
 
         /// <summary>
-        ///     Drops the least recently played sfx from the cache and destroys its clip.
+        ///     Drops the least recently used sfx (played or fetched with <see cref="GetClip" />) from the cache and destroys its clip.
+        ///     Uses an access counter, not time, so it also works in Edit mode where time does not advance between calls.
         /// </summary>
         internal static void PurgeCache()
         {
@@ -290,20 +293,17 @@ namespace SOSXR.TinySynth
                 return;
             }
 
-            var now = GetTimestamp();
-            var maxAge = float.MinValue;
+            var lowest = long.MaxValue;
             var oldest = new TinySynthSound();
 
             foreach (var entry in cache)
             {
-                var age = now - entry.Value.triggerTime;
-
-                if (age < maxAge)
+                if (entry.Value.lastUsed >= lowest)
                 {
                     continue;
                 }
 
-                maxAge = age;
+                lowest = entry.Value.lastUsed;
                 oldest = entry.Key;
             }
 
@@ -351,6 +351,8 @@ namespace SOSXR.TinySynth
             public AudioClip clip;
             /// <summary>True until the sound is requested for the first time.</summary>
             public bool firstPlay = true;
+            /// <summary>Value of the access counter at the last cache access. Lowest is evicted first.</summary>
+            public long lastUsed;
 
 
             /// <summary>Creates an entry for the supplied clip.</summary>

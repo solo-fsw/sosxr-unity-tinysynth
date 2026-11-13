@@ -26,9 +26,13 @@ namespace SOSXR.TinySynth.Tests
         }
 
 
+        /// <summary>A fixed, short sound. The presets are random, so they cannot be used as stable cache keys.</summary>
         private static TinySynthSound Sound(int variant)
         {
-            var sound = TinySynthPreset.PickupCoin();
+            var sound = new TinySynthSound();
+            sound.Reset();
+            sound.sustainTime = 0.05f;
+            sound.decayTime = 0.1f;
             sound.startFrequency = 0.2f + variant * 0.005f;
 
             return sound;
@@ -79,6 +83,25 @@ namespace SOSXR.TinySynth.Tests
             }
 
             Assert.That(first == null, Is.True, "The evicted clip is a destroyed Unity object.");
+        }
+
+
+        [Test]
+        public void RecentlyUsedClip_IsKeptWhenEvicting()
+        {
+            var first = TinySynthPlayer.GetClip(Sound(0));
+            var second = TinySynthPlayer.GetClip(Sound(1));
+
+            for (var i = 2; i < TinySynthPlayer.MaxCacheSize; i++)
+            {
+                TinySynthPlayer.GetClip(Sound(i));
+            }
+
+            TinySynthPlayer.GetClip(Sound(0)); // use the first again, so the second is now the oldest
+            TinySynthPlayer.GetClip(Sound(TinySynthPlayer.MaxCacheSize)); // forces one eviction
+
+            Assert.That(first == null, Is.False, "Recently used clip is kept.");
+            Assert.That(second == null, Is.True, "Least recently used clip is evicted.");
         }
 
 

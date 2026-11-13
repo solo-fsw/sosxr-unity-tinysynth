@@ -71,7 +71,7 @@ Sound effects are **generated on first play and cached** by `TinySynthPlayer`.
 ## Caching
 
 - The cache holds up to 32 clips (`TinySynthPlayer.MaxCacheSize`).
-- When the cache is full, the least recently played clip is destroyed first.
+- When the cache is full, the least recently used clip (played or fetched with `GetClip`) is destroyed first.
 - `TinySynthPlayer.ClearCache()` destroys all cached clips.
 - `TinySynthPlayer.CacheCount` returns the number of cached clips.
 
