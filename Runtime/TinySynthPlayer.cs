@@ -58,10 +58,25 @@ namespace SOSXR.TinySynth
         }
 
 
-        /// <summary>Clears the cache and finds the AudioSources.</summary>
+        /// <summary>
+        ///     Claims the static player slot when it is free, clearing the cache, and finds the AudioSources.
+        ///     The cache is shared: a second player clearing it here would destroy clips the active player is still playing.
+        /// </summary>
         private void Start()
         {
-            ClearCache();
+            if (instance != null && instance != this)
+            {
+                return;
+            }
+
+            if (instance == null)
+            {
+                instance = this;
+                sources = null;
+                sourceIndex = 0;
+                ClearCache();
+            }
+
             UpdateSources();
         }
 
@@ -383,8 +398,16 @@ namespace SOSXR.TinySynth
         {
             // make sure we have the correct amount of audio sources
             // this needs to be done later since unity gets grumpy if we add/remove components in OnValidate
+            // Prefab assets cannot have components added or destroyed from here (DestroyImmediate on an asset throws).
+            // Their instances get corrected in their own OnValidate.
+            if (EditorUtility.IsPersistent(this) || PrefabUtility.IsPartOfPrefabAsset(this))
+            {
+                return;
+            }
+
             if (GetComponents<AudioSource>().Length != polyphony)
             {
+                EditorApplication.delayCall -= PurgeAndAddSources;
                 EditorApplication.delayCall += PurgeAndAddSources;
             }
         }
@@ -397,24 +420,56 @@ namespace SOSXR.TinySynth
         /// </summary>
         internal void PurgeAndAddSources()
         {
-            if (this == null)
+            if (this == null || EditorUtility.IsPersistent(this) || PrefabUtility.IsPartOfPrefabAsset(this))
             {
                 return;
             }
 
             var own = GetComponents<AudioSource>();
             var numSources = own.Length;
+            // In Edit mode, record the changes so they can be undone and the scene is marked dirty.
+            var recordUndo = !Application.isPlaying;
 
             while (numSources < polyphony)
             {
-                gameObject.AddComponent<AudioSource>();
+                if (recordUndo)
+                {
+                    Undo.AddComponent<AudioSource>(gameObject);
+                }
+                else
+                {
+                    gameObject.AddComponent<AudioSource>();
+                }
+
                 numSources++;
             }
 
-            while (numSources > polyphony && numSources > 1)
+            for (var i = numSources - 1; i >= 0 && numSources > polyphony && numSources > 1; i--)
             {
-                DestroyImmediate(own[numSources - 1]);
+                var source = own[i];
+
+                // An AudioSource that comes from the prefab cannot be removed from the instance here.
+                if (PrefabUtility.IsPartOfPrefabInstance(source) && !PrefabUtility.IsAddedComponentOverride(source))
+                {
+                    continue;
+                }
+
+                if (recordUndo)
+                {
+                    Undo.DestroyObjectImmediate(source);
+                }
+                else
+                {
+                    DestroyImmediate(source);
+                }
+
                 numSources--;
+            }
+
+            if (numSources > polyphony && numSources > 1)
+            {
+                Debug.LogWarning($"{nameof(TinySynthPlayer)}: could not remove AudioSources that come from the prefab. " +
+                                 "Lower the polyphony on the prefab asset instead.", this);
             }
 
             if (instance == this)

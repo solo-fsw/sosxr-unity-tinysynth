@@ -24,12 +24,19 @@ namespace SOSXR.TinySynth
         private const float ButtonMargin = 5;
         private const float RangeScaleToNormalized = 1f / RangeScale;
         private const float Margin = 2;
+        private const int MaxPreviewCacheSize = 16;
 
         private static FieldInfo[] _paramFields;
         private static Dictionary<string, ParamData> _paramData;
 
         private static readonly GUIStyle LockButtonStyle = "IN LockButton";
         private static readonly Color CurveColor = new(1.0f, 140.0f / 255.0f, 0.0f, 1.0f);
+
+        /// <summary>
+        ///     Preview samples per sound, so a repaint does not allocate and copy the whole clip.
+        ///     Keyed by value: any parameter change is a new key. Cleared when it grows past <see cref="MaxPreviewCacheSize" />.
+        /// </summary>
+        private readonly Dictionary<TinySynthSound, float[]> _previewSamples = new();
 
 
         /// <summary>
@@ -78,7 +85,7 @@ namespace SOSXR.TinySynth
             // don't render the preview if it's tiny
             if (previewRect.width > 1)
             {
-                DoRenderPreview(TinySynthPlayer.GetClip(PropertyToParams(property)), previewRect);
+                DoRenderPreview(GetPreviewSamples(PropertyToParams(property)), previewRect);
             }
 
             position.y += previewRect.height + Margin;
@@ -356,6 +363,11 @@ namespace SOSXR.TinySynth
         }
 
 
+        /// <summary>
+        ///     Builds the sound from the property's children (the inverse of <see cref="SetParam" />).
+        ///     Reading the SerializedProperty works for array/list elements, nested classes and base-class
+        ///     private fields, where looking up <c>property.name</c> on the target type does not.
+        /// </summary>
         private static TinySynthSound PropertyToParams(SerializedProperty property)
         {
             if (property?.serializedObject?.targetObject == null)
@@ -363,37 +375,73 @@ namespace SOSXR.TinySynth
                 return new TinySynthSound();
             }
 
-            var target = property.serializedObject.targetObject;
-            var type = target.GetType();
-            var field = type.GetField(property.name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            UpdateReflection();
 
-            if (field == null)
+            object boxed = new TinySynthSound(); // boxed, so FieldInfo.SetValue writes into this copy
+
+            foreach (var field in _paramFields)
             {
-                Debug.LogError($"Field {property.name} not found in {type}");
+                var prop = property.FindPropertyRelative(field.Name);
 
-                return new TinySynthSound();
+                if (prop == null)
+                {
+                    continue;
+                }
+
+                if (field.FieldType.IsEnum)
+                {
+                    field.SetValue(boxed, Enum.ToObject(field.FieldType, prop.intValue));
+                }
+                else if (field.FieldType == typeof(float))
+                {
+                    field.SetValue(boxed, prop.floatValue);
+                }
             }
 
-            return (TinySynthSound) field.GetValue(target);
+            return (TinySynthSound) boxed;
         }
 
 
-        private static void DoRenderPreview(AudioClip clip, Rect rect)
+        /// <summary>Returns the clip samples for <paramref name="sound" />, rendering and copying them only on a cache miss.</summary>
+        private float[] GetPreviewSamples(TinySynthSound sound)
         {
-            var samples = new float[clip.samples];
-            clip.GetData(samples, 0);
+            if (_previewSamples.TryGetValue(sound, out var samples))
+            {
+                return samples;
+            }
 
+            if (_previewSamples.Count >= MaxPreviewCacheSize)
+            {
+                _previewSamples.Clear();
+            }
+
+            var clip = TinySynthPlayer.GetClip(sound);
+            samples = clip != null && clip.samples > 0 ? new float[clip.samples] : Array.Empty<float>();
+
+            if (samples.Length > 0)
+            {
+                clip.GetData(samples, 0);
+            }
+
+            _previewSamples.Add(sound, samples);
+
+            return samples;
+        }
+
+
+        private static void DoRenderPreview(float[] samples, Rect rect)
+        {
             AudioCurveRendering.AudioCurveAndColorEvaluator dlg =
                 delegate(float x, out Color color)
                 {
                     color = CurveColor;
 
-                    if (clip.samples <= 0)
+                    if (samples.Length == 0)
                     {
                         return 0;
                     }
 
-                    var p = Mathf.FloorToInt(Mathf.Clamp(x * (clip.samples - 1), 0.0f, clip.samples - 1));
+                    var p = Mathf.FloorToInt(Mathf.Clamp(x * (samples.Length - 1), 0.0f, samples.Length - 1));
 
                     return samples[p];
                 };

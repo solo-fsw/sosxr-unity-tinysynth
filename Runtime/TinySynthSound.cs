@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
@@ -441,7 +442,7 @@ namespace SOSXR.TinySynth
             var str = "";
 
             // 24 params
-            str += WaveType + ",";
+            str += (uint) WaveType + ",";
             str += To4DP(attackTime) + ",";
             str += To4DP(sustainTime) + ",";
             str += To4DP(sustainPunch) + ",";
@@ -481,7 +482,7 @@ namespace SOSXR.TinySynth
 
             // 32 params
 
-            str += WaveType + ",";
+            str += (uint) WaveType + ",";
             str += To4DP(MasterVolume) + ",";
             str += To4DP(attackTime) + ",";
             str += To4DP(sustainTime) + ",";
@@ -524,80 +525,98 @@ namespace SOSXR.TinySynth
         /// <returns>If the string successfully parsed</returns>
         public bool SetSettingsString(string input)
         {
+            if (input == null)
+            {
+                Debug.LogError("Could not paste settings string: input is null");
+
+                return false;
+            }
+
             var values = input.Split(',');
+            var backup = this;
+            var ok = true;
 
             if (values.Length == 24)
             {
                 // Old format (SFXR): 24 parameters
                 Reset();
 
-                WaveType = (TinySynthWaveType) ParseUint(values[0]);
-                attackTime = ParseFloat(values[1]);
-                sustainTime = ParseFloat(values[2]);
-                sustainPunch = ParseFloat(values[3]);
-                decayTime = ParseFloat(values[4]);
-                startFrequency = ParseFloat(values[5]);
-                minFrequency = ParseFloat(values[6]);
-                slide = ParseFloat(values[7]);
-                deltaSlide = ParseFloat(values[8]);
-                vibratoDepth = ParseFloat(values[9]);
-                vibratoSpeed = ParseFloat(values[10]);
-                changeAmount = ParseFloat(values[11]);
-                changeSpeed = ParseFloat(values[12]);
-                squareDuty = ParseFloat(values[13]);
-                dutySweep = ParseFloat(values[14]);
-                repeatSpeed = ParseFloat(values[15]);
-                phaserOffset = ParseFloat(values[16]);
-                phaserSweep = ParseFloat(values[17]);
-                lpFilterCutoff = ParseFloat(values[18]);
-                lpFilterCutoffSweep = ParseFloat(values[19]);
-                lpFilterResonance = ParseFloat(values[20]);
-                hpFilterCutoff = ParseFloat(values[21]);
-                hpFilterCutoffSweep = ParseFloat(values[22]);
-                MasterVolume = ParseFloat(values[23]);
+                WaveType = ParseWaveType(values[0], ref ok);
+                attackTime = ParseFloat(values[1], ref ok);
+                sustainTime = ParseFloat(values[2], ref ok);
+                sustainPunch = ParseFloat(values[3], ref ok);
+                decayTime = ParseFloat(values[4], ref ok);
+                startFrequency = ParseFloat(values[5], ref ok);
+                minFrequency = ParseFloat(values[6], ref ok);
+                slide = ParseFloat(values[7], ref ok);
+                deltaSlide = ParseFloat(values[8], ref ok);
+                vibratoDepth = ParseFloat(values[9], ref ok);
+                vibratoSpeed = ParseFloat(values[10], ref ok);
+                changeAmount = ParseFloat(values[11], ref ok);
+                changeSpeed = ParseFloat(values[12], ref ok);
+                squareDuty = ParseFloat(values[13], ref ok);
+                dutySweep = ParseFloat(values[14], ref ok);
+                repeatSpeed = ParseFloat(values[15], ref ok);
+                phaserOffset = ParseFloat(values[16], ref ok);
+                phaserSweep = ParseFloat(values[17], ref ok);
+                lpFilterCutoff = ParseFloat(values[18], ref ok);
+                lpFilterCutoffSweep = ParseFloat(values[19], ref ok);
+                lpFilterResonance = ParseFloat(values[20], ref ok);
+                hpFilterCutoff = ParseFloat(values[21], ref ok);
+                hpFilterCutoffSweep = ParseFloat(values[22], ref ok);
+                MasterVolume = ParseFloat(values[23], ref ok);
             }
             else if (values.Length >= 32)
             {
                 // New format (BFXR): 32 parameters (or more, but locked parameters are ignored)
                 Reset();
 
-                WaveType = (TinySynthWaveType) ParseUint(values[0]);
-                MasterVolume = ParseFloat(values[1]);
-                attackTime = ParseFloat(values[2]);
-                sustainTime = ParseFloat(values[3]);
-                sustainPunch = ParseFloat(values[4]);
-                decayTime = ParseFloat(values[5]);
-                compressionAmount = ParseFloat(values[6]);
-                startFrequency = ParseFloat(values[7]);
-                minFrequency = ParseFloat(values[8]);
-                slide = ParseFloat(values[9]);
-                deltaSlide = ParseFloat(values[10]);
-                vibratoDepth = ParseFloat(values[11]);
-                vibratoSpeed = ParseFloat(values[12]);
-                overtones = ParseFloat(values[13]);
-                overtoneFalloff = ParseFloat(values[14]);
-                changeRepeat = ParseFloat(values[15]);
-                changeAmount = ParseFloat(values[16]);
-                changeSpeed = ParseFloat(values[17]);
-                changeAmount2 = ParseFloat(values[18]);
-                changeSpeed2 = ParseFloat(values[19]);
-                squareDuty = ParseFloat(values[20]);
-                dutySweep = ParseFloat(values[21]);
-                repeatSpeed = ParseFloat(values[22]);
-                phaserOffset = ParseFloat(values[23]);
-                phaserSweep = ParseFloat(values[24]);
-                lpFilterCutoff = ParseFloat(values[25]);
-                lpFilterCutoffSweep = ParseFloat(values[26]);
-                lpFilterResonance = ParseFloat(values[27]);
-                hpFilterCutoff = ParseFloat(values[28]);
-                hpFilterCutoffSweep = ParseFloat(values[29]);
-                bitCrush = ParseFloat(values[30]);
-                bitCrushSweep = ParseFloat(values[31]);
+                WaveType = ParseWaveType(values[0], ref ok);
+                MasterVolume = ParseFloat(values[1], ref ok);
+                attackTime = ParseFloat(values[2], ref ok);
+                sustainTime = ParseFloat(values[3], ref ok);
+                sustainPunch = ParseFloat(values[4], ref ok);
+                decayTime = ParseFloat(values[5], ref ok);
+                compressionAmount = ParseFloat(values[6], ref ok);
+                startFrequency = ParseFloat(values[7], ref ok);
+                minFrequency = ParseFloat(values[8], ref ok);
+                slide = ParseFloat(values[9], ref ok);
+                deltaSlide = ParseFloat(values[10], ref ok);
+                vibratoDepth = ParseFloat(values[11], ref ok);
+                vibratoSpeed = ParseFloat(values[12], ref ok);
+                overtones = ParseFloat(values[13], ref ok);
+                overtoneFalloff = ParseFloat(values[14], ref ok);
+                changeRepeat = ParseFloat(values[15], ref ok);
+                changeAmount = ParseFloat(values[16], ref ok);
+                changeSpeed = ParseFloat(values[17], ref ok);
+                changeAmount2 = ParseFloat(values[18], ref ok);
+                changeSpeed2 = ParseFloat(values[19], ref ok);
+                squareDuty = ParseFloat(values[20], ref ok);
+                dutySweep = ParseFloat(values[21], ref ok);
+                repeatSpeed = ParseFloat(values[22], ref ok);
+                phaserOffset = ParseFloat(values[23], ref ok);
+                phaserSweep = ParseFloat(values[24], ref ok);
+                lpFilterCutoff = ParseFloat(values[25], ref ok);
+                lpFilterCutoffSweep = ParseFloat(values[26], ref ok);
+                lpFilterResonance = ParseFloat(values[27], ref ok);
+                hpFilterCutoff = ParseFloat(values[28], ref ok);
+                hpFilterCutoffSweep = ParseFloat(values[29], ref ok);
+                bitCrush = ParseFloat(values[30], ref ok);
+                bitCrushSweep = ParseFloat(values[31], ref ok);
             }
             else
             {
                 Debug.LogError(
                     $"Could not paste settings string: parameters contain {values.Length} values (was expecting 24 or >32)");
+
+                return false;
+            }
+
+            if (!ok)
+            {
+                // Leave the parameters untouched when any value is not a number.
+                this = backup;
+                Debug.LogError("Could not paste settings string: it contains a value that is not a number");
 
                 return false;
             }
@@ -633,30 +652,59 @@ namespace SOSXR.TinySynth
                 return "";
             }
 
-            return value.ToString("#.####");
+            // Invariant culture: a culture with a decimal comma would add extra fields to the comma-delimited string.
+            return value.ToString("#.####", CultureInfo.InvariantCulture);
         }
 
 
         /// <summary>
-        ///     Parses a string into an uint value; also returns 0 if the string is empty, rather than an error
+        ///     Parses a wave type from its number (or, for strings written by older versions, its name);
+        ///     returns 0 if the string is empty. Sets <paramref name="ok" /> to false when the value cannot be parsed.
         /// </summary>
-        private uint ParseUint(string value)
+        private static TinySynthWaveType ParseWaveType(string value, ref bool ok)
         {
-            return value.Length == 0 ? 0 : uint.Parse(value);
-        }
+            value = value.Trim();
 
-
-        /// <summary>
-        ///     Parses a string into a float value; also returns 0 if the string is empty, rather than an error
-        /// </summary>
-        private float ParseFloat(string value)
-        {
             if (value.Length == 0)
             {
                 return 0;
             }
 
-            return float.Parse(value);
+            if (uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var number))
+            {
+                return (TinySynthWaveType) number;
+            }
+
+            if (Enum.TryParse(value, true, out TinySynthWaveType waveType))
+            {
+                return waveType;
+            }
+
+            ok = false;
+
+            return 0;
+        }
+
+
+        /// <summary>
+        ///     Parses a string into a float value (invariant culture); also returns 0 if the string is empty, rather than an error.
+        ///     Sets <paramref name="ok" /> to false when the value cannot be parsed.
+        /// </summary>
+        private static float ParseFloat(string value, ref bool ok)
+        {
+            if (value.Trim().Length == 0)
+            {
+                return 0;
+            }
+
+            if (float.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
+            {
+                return result;
+            }
+
+            ok = false;
+
+            return 0;
         }
 
 
